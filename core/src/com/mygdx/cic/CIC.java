@@ -1,31 +1,49 @@
 package com.mygdx.cic;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.cic.bodies.*;
+
+
 
 public class CIC extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+	private World world;
+	private OrthographicCamera camera;
+	private Box2DDebugRenderer debugRenderer;
+	private CircleBody circle;
+	private GroundBody ground;
+
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		world = new World(new Vector2(0, -10), true);
+		camera = new OrthographicCamera(128f, 102.4f);
+		debugRenderer = new Box2DDebugRenderer();
+
+		circle = new CircleBody(world, debugRenderer, camera);
+		ground = new GroundBody(world, debugRenderer, camera);
+
+		ground.create();
+		circle.create(5, 18);
+		for (int i = 0; i < 10; i++) {
+			circle.create(-(float) Math.random() * 50, (float) Math.random() * 50);
+		}
+
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		circle.render();
+
 	}
-	
+
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+		circle.dispose();
 	}
 }
