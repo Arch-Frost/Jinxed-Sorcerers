@@ -16,6 +16,7 @@ public class CIC extends ApplicationAdapter {
 	private Box2DDebugRenderer debugRenderer;
 	private CircleBody circle;
 	private GroundBody ground;
+	private UserControlledCircle player;
 
 
 	@Override
@@ -26,19 +27,24 @@ public class CIC extends ApplicationAdapter {
 
 		circle = new CircleBody(world, debugRenderer, camera);
 		ground = new GroundBody(world, debugRenderer, camera);
+		player = new UserControlledCircle(world,debugRenderer,camera);
 
 		ground.create();
 		circle.create(5, 18);
 		for (int i = 0; i < 10; i++) {
 			circle.create(-(float) Math.random() * 50, (float) Math.random() * 50);
 		}
+		player.create(5,6);
+
 
 	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		circle.render();
+		player.update();
 
 	}
 

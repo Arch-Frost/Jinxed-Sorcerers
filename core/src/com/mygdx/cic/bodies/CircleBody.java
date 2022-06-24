@@ -1,11 +1,14 @@
 package com.mygdx.cic.bodies;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class CircleBody extends AbstractBody{
     private CircleShape circle;
+    protected Body body;
 
     public CircleBody(World world, Box2DDebugRenderer debugRenderer , OrthographicCamera camera) {
         super(world, debugRenderer, camera);
@@ -20,7 +23,7 @@ public class CircleBody extends AbstractBody{
         bodyDef.position.set(x, y);
 
 
-        Body body = world.createBody(bodyDef);
+         body = world.createBody(bodyDef);
 
 
         circle = new CircleShape();
@@ -44,4 +47,6 @@ public class CircleBody extends AbstractBody{
     public void dispose () {
         super.dispose();
     }
+
+
 }
