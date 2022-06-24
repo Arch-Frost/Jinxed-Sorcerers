@@ -10,6 +10,10 @@ public class CircleBody extends AbstractBody{
     private CircleShape circle;
     protected Body body;
 
+    public Body getBody() {
+        return body;
+    }
+
     public CircleBody(World world, Box2DDebugRenderer debugRenderer , OrthographicCamera camera) {
         super(world, debugRenderer, camera);
 
