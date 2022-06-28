@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setWindowedMode(640, 480);
+		config.setWindowedMode(720, 480);
 		config.setForegroundFPS(60);
 		config.setTitle("ProjectCIC");
 		new Lwjgl3Application(new CIC(), config);
