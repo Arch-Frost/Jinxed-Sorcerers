@@ -22,8 +22,7 @@ public abstract class AbstractBody {
 
     // Render method to be called in render() of main class. Only call render method of any ONE object in main class.
     public void render() {
-        debugRenderer.render(world, camera.combined);
-        world.step(1/60f, 6, 2);
+
     }
 
     // Call this method in dispose() method of main class by any ONE object.
