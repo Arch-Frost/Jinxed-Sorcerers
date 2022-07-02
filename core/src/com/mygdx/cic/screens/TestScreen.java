@@ -24,7 +24,7 @@ public class TestScreen implements Screen {
         debugRenderer = new Box2DDebugRenderer();
 
         circle = new CircleBody(world, debugRenderer, camera);
-        ground = new GroundBody(world, debugRenderer, camera);
+//        ground = new GroundBody(world, debugRenderer, camera);
 
         ground.create();
         circle.create(5, 18);

@@ -4,6 +4,8 @@ package com.mygdx.cic.bodies;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.*;
 
+import static com.mygdx.cic.utils.Constants.PPM;
+
 public class CircleBody extends AbstractBody{
     private CircleShape circle;
 
@@ -17,7 +19,7 @@ public class CircleBody extends AbstractBody{
         BodyDef bodyDef = new BodyDef();
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(x * PPM, y * PPM);
 
 
         Body body = world.createBody(bodyDef);
