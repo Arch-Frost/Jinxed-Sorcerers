@@ -9,7 +9,8 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setWindowedMode(720, 480);
 		config.setForegroundFPS(60);
-		config.setTitle("ProjectCIC");
+		config.setTitle("CIC");
+		config.setMaximized(true);
 		new Lwjgl3Application(new CIC(), config);
 	}
 }
