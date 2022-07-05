@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.cic.CIC;
 import com.mygdx.cic.bodies.CircleBody;
 import com.mygdx.cic.utils.TiledObjectUtil;
 
@@ -33,12 +34,14 @@ public class GameScreen implements Screen {
     private Body player2;
     private Body platform;
     private Box2DDebugRenderer b2dr;
-
+    private CIC parent;
     private OrthogonalTiledMapRenderer mapRenderer;
     private TiledMap map;
     private CircleBody circle;
 
-
+    public GameScreen(CIC cic){
+        parent=cic;
+    }
     @Override
     public void show() {
         float w = Gdx.graphics.getWidth();
@@ -50,8 +53,8 @@ public class GameScreen implements Screen {
         world = new World(new Vector2(0f,0f), false);
         b2dr = new Box2DDebugRenderer();
 
-        player1 = createBox(-2f, 3f, 32f, 32f, false);
-        player2 = createBox(2f, 3f, 32f, 32f, false);
+        player1 = createBox(-2f, 3f, 20f, 20f, false);
+        player2 = createBox(2f, 3f, 20f, 20f, false);
         platform = createBox(0,0, 4000f, 32, true);
 
         batch = new SpriteBatch();
@@ -61,7 +64,7 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("Map2/map 2.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        TiledObjectUtil.parseTiledObjectLayer(world, map.getLayers().get("ahmad").getObjects());
+        TiledObjectUtil.parseTiledObjectLayer(world, map.getLayers().get("obj").getObjects());
     }
 
     @Override
