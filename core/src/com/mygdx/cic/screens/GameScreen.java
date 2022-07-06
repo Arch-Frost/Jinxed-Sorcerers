@@ -1,9 +1,11 @@
 package com.mygdx.cic.screens;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,7 +16,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.cic.bodies.CircleBody;
 import com.mygdx.cic.utils.TiledObjectUtil;
 
 import static com.mygdx.cic.utils.Constants.PPM;
@@ -31,12 +32,13 @@ public class GameScreen implements Screen {
     private World world;
     private Body player1;
     private Body player2;
-    private Body platform;
     private Box2DDebugRenderer b2dr;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private TiledMap map;
-    private CircleBody circle;
+
+//    private RayHandler rayHandler;
+//    private PointLight myLight;
 
 
     @Override
@@ -50,9 +52,8 @@ public class GameScreen implements Screen {
         world = new World(new Vector2(0f,0f), false);
         b2dr = new Box2DDebugRenderer();
 
-        player1 = createBox(-2f, 3f, 32f, 32f, false);
-        player2 = createBox(2f, 3f, 32f, 32f, false);
-        platform = createBox(0,0, 4000f, 32, true);
+        player1 = createBox(4f, 3f, 16f, 32f, false);
+        player2 = createBox(7f, 3f, 16f, 32f, false);
 
         batch = new SpriteBatch();
         p1tex = new Texture("Images/player1.png");
@@ -61,7 +62,13 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("Map2/map 2.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
+//        rayHandler = new RayHandler(world);
+//        rayHandler.setAmbientLight(0.5f);
+//        myLight = new PointLight(rayHandler, 120, Color.WHITE ,5, 0,0);
+//        myLight.attachToBody(player1, 1, 1);
+
         TiledObjectUtil.parseTiledObjectLayer(world, map.getLayers().get("ahmad").getObjects());
+
     }
 
     @Override
@@ -78,43 +85,20 @@ public class GameScreen implements Screen {
 
 
         b2dr.render(world, camera.combined.scl(PPM));
+//        rayHandler.render();
         update(delta);
     }
 
-    @Override
-    public void resize(int width, int height) {
-        camera.setToOrtho(false, width / SCALE, height / SCALE);
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        world.dispose();
-        b2dr.dispose();
-        batch.dispose();
-    }
 
     public void update(float delta) {
         world.step(1/60f, 6,2);
 
+//        rayHandler.update();
+
         inputUpdate(delta);
         cameraUpdate(delta);
         batch.setProjectionMatrix(camera.combined);
+//        rayHandler.setCombinedMatrix(camera.combined.cpy().scl(PPM));
 
         playerDistance = (float) Math.sqrt(Math.pow((player2.getPosition().y - player1.getPosition().y), 2)
                 + Math.pow((player2.getPosition().x - player1.getPosition().x), 2)) * PPM + p1tex.getWidth();
@@ -182,5 +166,34 @@ public class GameScreen implements Screen {
         pBody.createFixture(shape, 1f);
         shape.dispose();
         return pBody;
+    }
+
+    @Override
+    public void dispose() {
+        world.dispose();
+        b2dr.dispose();
+        batch.dispose();
+//        rayHandler.dispose();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        camera.setToOrtho(false, width / SCALE, height / SCALE);
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
     }
 }
