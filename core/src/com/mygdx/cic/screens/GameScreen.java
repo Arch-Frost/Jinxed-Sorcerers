@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
     private Body player1;
     private Body player2;
     private Box2DDebugRenderer b2dr;
+    private Body bullet;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private TiledMap map;
@@ -61,6 +62,7 @@ public class GameScreen implements Screen {
 
         map = new TmxMapLoader().load("Map2/map 2.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
+        bullet = createBullet();
 
 //        rayHandler = new RayHandler(world);
 //        rayHandler.setAmbientLight(0.5f);
@@ -97,6 +99,7 @@ public class GameScreen implements Screen {
 
         inputUpdate(delta);
         cameraUpdate(delta);
+        bulletUpdate(delta);
         batch.setProjectionMatrix(camera.combined);
 //        rayHandler.setCombinedMatrix(camera.combined.cpy().scl(PPM));
 
@@ -134,7 +137,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){ p2HorizontalForce -= 1;}
         if (Gdx.input.isKeyPressed(Input.Keys.UP)){ p2VerticalForce += 1; }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){ p2VerticalForce -= 1; }
-            player2.setLinearVelocity(p2HorizontalForce * 5, p2VerticalForce * 5);
+        player2.setLinearVelocity(p2HorizontalForce * 5, p2VerticalForce * 5);
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.P))
@@ -195,5 +198,34 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
 
+    }
+    public Body createBullet(){
+        Body pBody;
+        BodyDef bodydef = new BodyDef();
+
+        bodydef.type = BodyDef.BodyType.KinematicBody;
+
+
+        bodydef.position.set(player1.getPosition().x, player2.getPosition().y   );
+        bodydef.fixedRotation = true;
+        bodydef.bullet = true;
+
+
+        pBody = world.createBody(bodydef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(5 / 2 / PPM,5 / 2 / PPM);
+
+        pBody.createFixture(shape, 1f);
+        shape.dispose();
+        return pBody;
+    }
+    public void bulletUpdate(float delta){
+        float x_position = player2.getPosition().x - bullet.getPosition().x;
+        float y_position  = player2.getPosition().y - bullet.getPosition().y;
+        float magnitude = (float) Math.pow(x_position*x_position + y_position*y_position,0.5);
+        float i_cap = x_position/magnitude;
+        float j_cap = y_position/magnitude;
+        bullet.setLinearVelocity(i_cap,j_cap);
     }
 }
