@@ -1,11 +1,8 @@
 package com.mygdx.cic.screens;
 
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.cic.utils.CollisionListener;
+import com.mygdx.cic.utils.BodiesData;
 import com.mygdx.cic.utils.TiledObjectUtil;
 
 import static com.mygdx.cic.utils.Constants.PPM;
@@ -37,6 +36,7 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer;
     private TiledMap map;
 
+
 //    private RayHandler rayHandler;
 //    private PointLight myLight;
 
@@ -46,18 +46,22 @@ public class GameScreen implements Screen {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
+        batch = new SpriteBatch();
+        p1tex = new Texture("Images/player1.png");
+        p2tex = new Texture("Images/player2.png");
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w / SCALE, h / SCALE);
 
         world = new World(new Vector2(0f,0f), false);
         b2dr = new Box2DDebugRenderer();
+        world.setContactListener(new CollisionListener());
 
         player1 = createBox(4f, 3f, 16f, 32f, false);
+        player1.setUserData(BodiesData.PLAYER1);
         player2 = createBox(7f, 3f, 16f, 32f, false);
+        player2.setUserData(BodiesData.PLAYER2);
 
-        batch = new SpriteBatch();
-        p1tex = new Texture("Images/player1.png");
-        p2tex = new Texture("Images/player2.png");
 
         map = new TmxMapLoader().load("Map2/map 2.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
@@ -100,8 +104,9 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 //        rayHandler.setCombinedMatrix(camera.combined.cpy().scl(PPM));
 
-        playerDistance = (float) Math.sqrt(Math.pow((player2.getPosition().y - player1.getPosition().y), 2)
-                + Math.pow((player2.getPosition().x - player1.getPosition().x), 2)) * PPM + p1tex.getWidth();
+//        playerDistance = (float) Math.sqrt(Math.pow((player2.getPosition().y - player1.getPosition().y), 2)
+//                + Math.pow((player2.getPosition().x - player1.getPosition().x), 2)) * PPM + p1tex.getWidth();
+        playerDistance = Vector2.dst2(player1.getPosition().x, player1.getPosition().y, player2.getPosition().x, player2.getPosition().y);
 
         mapRenderer.setView(camera);
     }
@@ -142,6 +147,10 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.O))
             camera.zoom -= 0.02;
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            createBullet(world, player1, player2);
+        }
     }
 
     public Body createBox(float x, float y, float width, float height, boolean isStatic) {
@@ -195,5 +204,31 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
 
+    }
+
+    public Body createBullet(World world, Body player1, Body player2) {
+        Body BulletBody;
+        BodyDef bodydef = new BodyDef();
+
+        bodydef.type = BodyDef.BodyType.DynamicBody;
+        bodydef.bullet = true;
+        bodydef.position.set(player1.getPosition().x + 16/PPM, player1.getPosition().y);
+        bodydef.fixedRotation = false;
+
+        BulletBody = world.createBody(bodydef);
+        BulletBody.setLinearVelocity(new Vector2(player2.getPosition().x - player1.getPosition().x, player2.getPosition().y - player1.getPosition().y));
+        BulletBody.applyForceToCenter(new Vector2(player2.getPosition().x - player1.getPosition().x, player2.getPosition().y - player1.getPosition().y), false);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(4 / 2 / PPM,4 / 2 / PPM);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        BulletBody.createFixture(fixtureDef);
+        BulletBody.setUserData(BodiesData.BULLET);
+
+        shape.dispose();
+        return BulletBody;
     }
 }
