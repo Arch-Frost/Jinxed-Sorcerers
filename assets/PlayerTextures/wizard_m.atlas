@@ -1,0 +1,34 @@
+
+wizard_m.png
+size: 128, 32
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+wizzard_m_idle_anim_f0
+  rotate: false
+  xy: 20, 2
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
+wizzard_m_idle_anim_f1
+  rotate: false
+  xy: 56, 2
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
+wizzard_m_idle_anim_f2
+  rotate: false
+  xy: 38, 2
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
+wizzard_m_idle_anim_f3
+  rotate: false
+  xy: 2, 2
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
