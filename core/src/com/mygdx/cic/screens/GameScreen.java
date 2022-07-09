@@ -1,11 +1,8 @@
 package com.mygdx.cic.screens;
 
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,7 +13,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.cic.utils.CollisionListener;
+import com.mygdx.cic.utils.BodiesData;
 import com.mygdx.cic.utils.TiledObjectUtil;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import static com.mygdx.cic.utils.Constants.PPM;
 
@@ -32,11 +34,18 @@ public class GameScreen implements Screen {
     private World world;
     private Body player1;
     private Body player2;
-    private Box2DDebugRenderer b2dr;
     private Body bullet;
+    private Body bullet1;
+    private Box2DDebugRenderer b2dr;
+    private ArrayList<Body> bulletstoplayertwo;
+    private ArrayList<Body> bulletstoplaterone;
+    private ArrayList<Body> toberemoved;
+
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private TiledMap map;
+    private  CollisionListener c1;
+
 
 //    private RayHandler rayHandler;
 //    private PointLight myLight;
@@ -47,22 +56,28 @@ public class GameScreen implements Screen {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, w / SCALE, h / SCALE);
-
-        world = new World(new Vector2(0f,0f), false);
-        b2dr = new Box2DDebugRenderer();
-
-        player1 = createBox(4f, 3f, 16f, 32f, false);
-        player2 = createBox(7f, 3f, 16f, 32f, false);
-
         batch = new SpriteBatch();
         p1tex = new Texture("Images/player1.png");
         p2tex = new Texture("Images/player2.png");
 
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, w / SCALE, h / SCALE);
+
+        world = new World(new Vector2(0f,0f), false);
+        toberemoved = new ArrayList<>();
+        b2dr = new Box2DDebugRenderer();
+        c1 = new CollisionListener();
+        world.setContactListener(c1);
+        player1 = createBox(4f, 3f, 16f, 32f, false);
+        player1.setUserData(BodiesData.PLAYER1);
+        player2 = createBox(7f, 3f, 16f, 32f, false);
+        player2.setUserData(BodiesData.PLAYER2);
+        bulletstoplayertwo = new ArrayList<>();
+        bulletstoplaterone = new ArrayList<>();
+
+
         map = new TmxMapLoader().load("Map2/map 2.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
-        bullet = createBullet();
 
 //        rayHandler = new RayHandler(world);
 //        rayHandler.setAmbientLight(0.5f);
@@ -85,10 +100,10 @@ public class GameScreen implements Screen {
         batch.draw(p2tex, player2.getPosition().x * PPM - (p2tex.getWidth()/2) , player2.getPosition().y * PPM - (p2tex.getHeight()/2));
         batch.end();
 
-
+        update(delta);
         b2dr.render(world, camera.combined.scl(PPM));
 //        rayHandler.render();
-        update(delta);
+
     }
 
 
@@ -96,15 +111,32 @@ public class GameScreen implements Screen {
         world.step(1/60f, 6,2);
 
 //        rayHandler.update();
+        toberemoved = c1.getbodies();
+        Iterator<Body> i = toberemoved.iterator();
+        if(!world.isLocked()){
+            while(i.hasNext()){
+                Body b = i.next();
+                if(bulletstoplayertwo.contains(b)) bulletstoplayertwo.remove(b);
+                if(bulletstoplaterone.contains(b)) bulletstoplaterone.remove(b);
+
+                world.destroyBody(b);
+                i.remove();
+            }
+        }
 
         inputUpdate(delta);
         cameraUpdate(delta);
-        bulletUpdate(delta);
+        for(Body b : bulletstoplayertwo){
+            update_Bullet(delta,b,player2);}
+        for(Body B : bulletstoplaterone){
+            update_Bullet(delta,B,player1);
+        }
         batch.setProjectionMatrix(camera.combined);
 //        rayHandler.setCombinedMatrix(camera.combined.cpy().scl(PPM));
 
-        playerDistance = (float) Math.sqrt(Math.pow((player2.getPosition().y - player1.getPosition().y), 2)
-                + Math.pow((player2.getPosition().x - player1.getPosition().x), 2)) * PPM + p1tex.getWidth();
+//        playerDistance = (float) Math.sqrt(Math.pow((player2.getPosition().y - player1.getPosition().y), 2)
+//                + Math.pow((player2.getPosition().x - player1.getPosition().x), 2)) * PPM + p1tex.getWidth();
+        playerDistance = Vector2.dst2(player1.getPosition().x, player1.getPosition().y, player2.getPosition().x, player2.getPosition().y);
 
         mapRenderer.setView(camera);
     }
@@ -124,19 +156,39 @@ public class GameScreen implements Screen {
         int p2HorizontalForce = 0;
         int p2VerticalForce = 0;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.X)){ player2.setActive(false);}
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)){ player2.setActive(true);}
+        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+            player2.setActive(false);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+            player2.setActive(true);
+        }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D)){ p1HorizontalForce += 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.A)){ p1HorizontalForce -= 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){ p1VerticalForce += 1; }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)){ p1VerticalForce -= 1; }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            p1HorizontalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            p1HorizontalForce -= 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            p1VerticalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            p1VerticalForce -= 1;
+        }
         player1.setLinearVelocity(p1HorizontalForce * 5, p1VerticalForce * 5);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){ p2HorizontalForce += 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){ p2HorizontalForce -= 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)){ p2VerticalForce += 1; }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){ p2VerticalForce -= 1; }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            p2HorizontalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            p2HorizontalForce -= 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            p2VerticalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            p2VerticalForce -= 1;
+        }
         player2.setLinearVelocity(p2HorizontalForce * 5, p2VerticalForce * 5);
 
 
@@ -145,7 +197,27 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.O))
             camera.zoom -= 0.02;
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+
+            bullet = createBullet(world, player1,true);
+            bullet.setUserData(BodiesData.BULLET);
+            bulletstoplayertwo.add(bullet);
+
+            bullet1 = createBullet(world, player2,false);
+            bullet1.setUserData(BodiesData.BULLET1);
+            bulletstoplaterone.add(bullet1);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)){
+            if(bullet != null){
+                world.destroyBody(bullet);
+                bulletstoplayertwo.remove(bullet);
+                bullet = null;}
+        }
     }
+
+
+
 
     public Body createBox(float x, float y, float width, float height, boolean isStatic) {
         Body pBody;
@@ -199,30 +271,39 @@ public class GameScreen implements Screen {
     public void hide() {
 
     }
-    public Body createBullet(){
-        Body pBody;
+
+    public Body createBullet(World world, Body PointofOrigin,Boolean add) {
+        Body BulletBody;
         BodyDef bodydef = new BodyDef();
 
         bodydef.type = BodyDef.BodyType.KinematicBody;
-
-
-        bodydef.position.set(player1.getPosition().x, player2.getPosition().y   );
-        bodydef.fixedRotation = true;
         bodydef.bullet = true;
+        float tobeadded = (add? 16.0f : -16.0f);
+        bodydef.position.set(PointofOrigin.getPosition().x + tobeadded/PPM , PointofOrigin.getPosition().y);
+        bodydef.fixedRotation = false;
 
 
-        pBody = world.createBody(bodydef);
+        BulletBody = world.createBody(bodydef);
+
+//        BulletBody.applyForceToCenter(new Vector2(
+//                player2.getPosition().x - player1.getPosition().x,
+//                player2.getPosition().y - player1.getPosition().y), false);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(5 / 2 / PPM,5 / 2 / PPM);
+        shape.setAsBox(4 / 2 / PPM,4 / 2 / PPM);
 
-        pBody.createFixture(shape, 1f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        BulletBody.createFixture(fixtureDef);
+//        BulletBody.setUserData(BodiesData.BULLET);
+
         shape.dispose();
-        return pBody;
+        return BulletBody;
     }
-    public void bulletUpdate(float delta){
-        float x_position = player2.getPosition().x - bullet.getPosition().x;
-        float y_position  = player2.getPosition().y - bullet.getPosition().y;
+    public void update_Bullet(float delta,Body bullet, Body Endpoint){
+        float x_position = Endpoint.getPosition().x - bullet.getPosition().x;
+        float y_position  = Endpoint.getPosition().y - bullet.getPosition().y;
         float magnitude = (float) Math.pow(x_position*x_position + y_position*y_position,0.5);
         float i_cap = x_position/magnitude;
         float j_cap = y_position/magnitude;
