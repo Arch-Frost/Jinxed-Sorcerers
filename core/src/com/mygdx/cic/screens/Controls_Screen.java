@@ -16,10 +16,10 @@ public class Controls_Screen implements Screen{
     private CIC parent;
     private Stage stage;
     static boolean return_main_menu=false;
+    static boolean return_pause_menu=false;
     private Skin mySkin;
     public Controls_Screen(CIC cic) {
         parent=cic;
-      //  CIC.menu_screen.dispose();
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -27,15 +27,16 @@ public class Controls_Screen implements Screen{
 
     @Override
     public void show() {
-        Texture texture = new Texture(Gdx.files.internal("d.jpg"));
+        Texture texture = new Texture(Gdx.files.internal("backgroundimage.jpg"));
         Image image1 = new Image(texture);
+        image1.setSize(1370,770);
         stage.addActor(image1);
-        mySkin = new Skin(Gdx.files.internal("skin/flat-earth-ui.json"));
-        Label Player1_control = new Label("Player 1 Controls", mySkin);
+        mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        Label Player1_control = new Label("Player 1 Controls", mySkin,"default");
         Player1_control.setSize(160, 80);
         Player1_control.setPosition(300,530);
         Player1_control.setAlignment(Align.center);
-
+        Player1_control.setFontScale(1.5f);
         Label l1 = new Label("Forward", mySkin);
         l1.setSize(160, 80);
         l1.setPosition(200,450);
@@ -80,6 +81,7 @@ public class Controls_Screen implements Screen{
         Label Player2_control = new Label("Player 2 Controls", mySkin);
         Player2_control.setSize(160, 80);
         Player2_control.setPosition(900,530);
+        Player2_control.setFontScale(1.5f);
         Player2_control.setAlignment(Align.center);
         Label l6 = new Label("Forward", mySkin);
         l6.setSize(160, 80);
@@ -128,7 +130,16 @@ public class Controls_Screen implements Screen{
         Back_button.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                          return_main_menu=true;
+                if (CIC.menu_screen.open_controls_from_menu){
+                    CIC.menu_screen.open_controls_from_menu=false;
+                    return_main_menu=true;
+                }
+                if (CIC.pause_screen.open_controls_from_pause){
+                    CIC.pause_screen.open_controls_from_pause=false;
+                    return_pause_menu=true;
+                }
+
+
             }
 
             @Override
@@ -137,8 +148,29 @@ public class Controls_Screen implements Screen{
             }
         });
 
-
-
+//
+//        Player1_control.setColor(Color.YELLOW);
+//        Player2_control.setColor(Color.YELLOW);
+//        l1.setColor(Color.YELLOW);
+//        l11.setColor(Color.YELLOW);
+//        l2.setColor(Color.YELLOW);
+//        l22.setColor(Color.YELLOW);
+//        l3.setColor(Color.YELLOW);
+//        l33.setColor(Color.YELLOW);
+//        l4.setColor(Color.YELLOW);
+//        l44.setColor(Color.YELLOW);
+//        l5.setColor(Color.YELLOW);
+//        l55.setColor(Color.YELLOW);
+//        l6.setColor(Color.YELLOW);
+//        l66.setColor(Color.YELLOW);
+//        l7.setColor(Color.YELLOW);
+//        l77.setColor(Color.YELLOW);
+//        l8.setColor(Color.YELLOW);
+//        l88.setColor(Color.YELLOW);
+//        l9.setColor(Color.YELLOW);
+//        l99.setColor(Color.YELLOW);
+//        l10.setColor(Color.YELLOW);
+//        l1010.setColor(Color.YELLOW);
         stage.addActor(Player1_control);
         stage.addActor(Player2_control);
         stage.addActor(Back_button);
@@ -170,6 +202,11 @@ public class Controls_Screen implements Screen{
             return_main_menu=false;
             CIC.menu_screen=new Menu_Screen(parent);
             parent.changeScreen(CIC.M_screen);
+        }
+        if(return_pause_menu){
+            return_pause_menu=false;
+            CIC.pause_screen=new Pause_Screen(parent);
+            parent.changeScreen(CIC.P_screen);
         }
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
