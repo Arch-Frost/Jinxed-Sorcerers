@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.cic.CIC;
 import com.mygdx.cic.entities.Bullet;
 import com.mygdx.cic.entities.Player;
 import com.mygdx.cic.utils.BodiesData;
@@ -31,6 +32,7 @@ import static com.mygdx.cic.utils.Constants.PPM;
 
 public class DungeonMap implements Screen{
     private final float SCALE = 2;
+    private final CIC parent;
     private float playerDistance;
     private float elapsedTime = 0f;
 
@@ -62,6 +64,10 @@ public class DungeonMap implements Screen{
 
 
     public boolean isPaused;
+
+    public DungeonMap(CIC cic) {
+        parent = cic;
+    }
 
     @Override
     public void show() {

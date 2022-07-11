@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.cic.CIC;
 import com.mygdx.cic.entities.*;
 import com.mygdx.cic.utils.*;
 
@@ -26,6 +27,7 @@ import static com.mygdx.cic.utils.Constants.PPM;
 
 public class OasisMap implements Screen{
     private final float SCALE = 2;
+    private final CIC parent;
     private float playerDistance;
     private float tempDistance;
     private float elapsedTime = 0f;
@@ -61,6 +63,10 @@ public class OasisMap implements Screen{
 
 
     public boolean isPaused;
+
+    public OasisMap(CIC cic) {
+        parent = cic;
+    }
 
     @Override
     public void show() {

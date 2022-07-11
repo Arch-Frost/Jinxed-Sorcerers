@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.cic.CIC;
-import com.mygdx.cic.bodies.CircleBody;
 import com.mygdx.cic.utils.TiledObjectUtil;
 
 import static com.mygdx.cic.utils.Constants.PPM;
@@ -37,7 +36,6 @@ public class GameScreen implements Screen {
     private CIC parent;
     private OrthogonalTiledMapRenderer mapRenderer;
     private TiledMap map;
-    private CircleBody circle;
 
     public GameScreen(CIC cic){
         parent=cic;
