@@ -1,0 +1,171 @@
+
+loading.png
+size: 2048, 2048
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+1
+  rotate: false
+  xy: 759, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+11
+  rotate: false
+  xy: 2, 604
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+16
+  rotate: false
+  xy: 2, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+15
+  rotate: false
+  xy: 2, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+19
+  rotate: false
+  xy: 2, 1206
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+4
+  rotate: false
+  xy: 759, 1206
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+9
+  rotate: false
+  xy: 759, 604
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+
+loading2.png
+size: 2048, 2048
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+10
+  rotate: false
+  xy: 2, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+13
+  rotate: false
+  xy: 2, 1206
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+18
+  rotate: false
+  xy: 759, 1206
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+20
+  rotate: false
+  xy: 759, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 759, 604
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+6
+  rotate: false
+  xy: 2, 604
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+
+loading3.png
+size: 2048, 2048
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+0
+  rotate: false
+  xy: 2, 604
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+12
+  rotate: false
+  xy: 759, 1206
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+17
+  rotate: false
+  xy: 759, 604
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+2
+  rotate: false
+  xy: 759, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+5
+  rotate: false
+  xy: 2, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+8
+  rotate: false
+  xy: 2, 1206
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+
+loading4.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+14
+  rotate: false
+  xy: 2, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1
+7
+  rotate: false
+  xy: 759, 2
+  size: 755, 600
+  orig: 755, 600
+  offset: 0, 0
+  index: -1

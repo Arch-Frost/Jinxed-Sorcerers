@@ -22,7 +22,7 @@ private TextureRegion trr;
     private CIC parent;
     private Skin mySkin;
     private Stage stage;
-    Animation animation;
+    private Animation animation;
     private SpriteBatch batch;
     private BitmapFontCache titleCache;
     TextureRegion [] textrarray;

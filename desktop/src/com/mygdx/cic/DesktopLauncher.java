@@ -14,7 +14,7 @@ public class DesktopLauncher {
 		config.setTitle("CIC");
 		config.setMaximized(true);
 		config.setResizable(false);
-		//config.setFullscreenMode();
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		new Lwjgl3Application(new CIC(), config);
 	}
 }
