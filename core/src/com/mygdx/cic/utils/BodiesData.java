@@ -1,5 +1,5 @@
 package com.mygdx.cic.utils;
 
 public enum BodiesData {
-    PLAYER1, PLAYER2, BULLET, TILEDMAP, BULLET1;
+    PLAYER1, PLAYER2, BULLET, TILEDMAP, BULLET1, ENEMY;
 }

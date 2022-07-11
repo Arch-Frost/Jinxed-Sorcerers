@@ -16,7 +16,6 @@ public class CollisionListener implements ContactListener {
         if(contact.getFixtureA() == null && contact.getFixtureB() == null) return;
         Body a = contact.getFixtureA().getBody();
         Body b = contact.getFixtureB().getBody();
-        System.out.println("Collision between " + a.getUserData() + " and " + b.getUserData());
         if(a.getUserData() == BodiesData.PLAYER2 && b.getUserData() == BodiesData.BULLET){
             if(!bodiesToBeRemoved.contains(b)) bodiesToBeRemoved.add(b);
 

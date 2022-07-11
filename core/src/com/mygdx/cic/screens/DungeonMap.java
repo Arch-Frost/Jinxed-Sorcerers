@@ -76,13 +76,14 @@ public class DungeonMap implements Screen{
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w / SCALE, h / SCALE);
+        camera.zoom = 5f;
 
 
 
-        p1atlas = new TextureAtlas(Gdx.files.internal("PlayerTextures/wizard_m.atlas"));
+        p1atlas = new TextureAtlas(Gdx.files.internal("EntityTextures/wizard_m.atlas"));
         player1animation = new Animation(1f/4f, p1atlas.getRegions());
 
-        p2atlas = new TextureAtlas(Gdx.files.internal("PlayerTextures/wizard_f.atlas"));
+        p2atlas = new TextureAtlas(Gdx.files.internal("EntityTextures/wizard_f.atlas"));
         player2animation = new Animation(1f/4f, p2atlas.getRegions());
 
         camera = new OrthographicCamera();
@@ -103,12 +104,12 @@ public class DungeonMap implements Screen{
         // Player 1: x = 4, y = 9, Player 2: x = 7, y = 9 --------- Dark Map
         // Player 1: x = 4, y = 5, Player 2: x = 7, y = 5 --------- Green Map
 
-        player1 = Player.createBox(world, 4f, 9f, 16f, 16f, false);
+        player1 = Player.createBody(world, 9f, 5f, 16f, 16f, false);
         player1.setUserData(BodiesData.PLAYER1);
-        player2 = Player.createBox(world, 7f, 9f, 16f, 16f, false);
+        player2 = Player.createBody(world, 41f, 5f, 16f, 16f, false);
         player2.setUserData(BodiesData.PLAYER2);
 
-        map = new TmxMapLoader().load("DarkMap/dark.tmx");
+        map = new TmxMapLoader().load("DungeonMap/dungeon.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
         TiledObjectUtil.parseTiledObjectLayer(world, map.getLayers().get("collision-layer").getObjects());
@@ -157,6 +158,10 @@ public class DungeonMap implements Screen{
     public void update(float delta) {
         world.step(1/60f, 6,2);
 
+        System.out.println("Player 1: x: " + player1.getPosition().x +" y: " + player1.getPosition().y);
+        System.out.println("Player 2: x: " + player2.getPosition().x +" y: " + player2.getPosition().y);
+        System.out.println("Camera Zoom: " + camera.zoom);
+
         toberemoved = listener.getbodies();
         Iterator<Body> i = toberemoved.iterator();
         if(!world.isLocked()){
@@ -187,8 +192,10 @@ public class DungeonMap implements Screen{
     public void cameraUpdate(float delta) {
         Vector3 position = camera.position;
         position.x = (player1.getPosition().x + player2.getPosition().x)/2 * PPM;
-        position.y = (player1.getPosition().y + player2.getPosition().y)/2 * PPM   ;
+        position.y = (player1.getPosition().y + player2.getPosition().y)/2 * PPM;
         camera.position.set(position);
+
+        do {camera.zoom = 2.5f;} while (false);
 
         camera.update();
     }

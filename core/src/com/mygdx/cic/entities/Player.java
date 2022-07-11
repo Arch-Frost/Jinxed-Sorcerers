@@ -8,10 +8,10 @@ public class Player {
     public static Body Body;
 
     public Player(World world, float x, float y, float width, float height, boolean isStatic) {
-        createBox(world, x, y, width, height, isStatic);
+        createBody(world, x, y, width, height, isStatic);
     }
 
-    public static Body createBox(World world, float x, float y, float width, float height, boolean isStatic) {
+    public static Body createBody(World world, float x, float y, float width, float height, boolean isStatic) {
         BodyDef bodydef = new BodyDef();
 
         if (isStatic)
