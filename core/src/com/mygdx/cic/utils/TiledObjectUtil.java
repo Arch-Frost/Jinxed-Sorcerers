@@ -36,6 +36,7 @@ public class TiledObjectUtil {
             bdef.type = BodyDef.BodyType.StaticBody;
             body = world.createBody(bdef);
             body.createFixture(shape, 1.0f);
+            body.setUserData(BodiesData.TILEDMAP);
             shape.dispose();
         }
     }
