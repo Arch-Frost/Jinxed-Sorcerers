@@ -5,10 +5,10 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import static com.mygdx.cic.utils.Constants.PPM;
 
-public class Enemy {
+public class Enemy extends Entity{
     private static Body Body;
 
-    public static Body createBody(World world, float x, float y, float width, float height) {
+    public static Body create(World world, float x, float y, float width, float height) {
         BodyDef bodydef = new BodyDef();
 
         bodydef.type = BodyDef.BodyType.DynamicBody;
@@ -32,13 +32,4 @@ public class Enemy {
         return Body;
     }
 
-    public static void updateEnemy(float delta, Body enemy, Body Endpoint){
-        float x_position = Endpoint.getPosition().x - enemy.getPosition().x;
-        float y_position  = Endpoint.getPosition().y - enemy.getPosition().y;
-        float magnitude = (float) Math.pow(x_position*x_position + y_position*y_position,0.5);
-        float i_cap = x_position/magnitude;
-        float j_cap = y_position/magnitude;
-        enemy.setLinearVelocity(2*i_cap,2*j_cap);
-        enemy.applyForceToCenter(new Vector2((float) Math.random(), (float) Math.random()), false);
-    }
 }

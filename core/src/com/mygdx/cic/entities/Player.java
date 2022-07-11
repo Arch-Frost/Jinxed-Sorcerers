@@ -4,14 +4,14 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import static com.mygdx.cic.utils.Constants.PPM;
 
-public class Player {
+public class Player extends Entity{
     public static Body Body;
 
     public Player(World world, float x, float y, float width, float height, boolean isStatic) {
-        createBody(world, x, y, width, height, isStatic);
+        create(world, x, y, width, height, isStatic);
     }
 
-    public static Body createBody(World world, float x, float y, float width, float height, boolean isStatic) {
+    public static Body create(World world, float x, float y, float width, float height, boolean isStatic) {
         BodyDef bodydef = new BodyDef();
 
         if (isStatic)
@@ -37,4 +37,5 @@ public class Player {
         shape.dispose();
         return Body;
     }
+
 }
