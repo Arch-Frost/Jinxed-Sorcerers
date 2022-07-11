@@ -19,6 +19,9 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.cic.bodies.*;
 import com.mygdx.cic.utils.*;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import static com.mygdx.cic.utils.Constants.PPM;
 
 public class OasisMap implements Screen{
@@ -41,10 +44,18 @@ public class OasisMap implements Screen{
     private World world;
     private Body player1;
     private Body player2;
+    private Body bullet;
+    private Body bullet1;
     private Box2DDebugRenderer b2dr;
+    private ArrayList<Body> bulletstoplayertwo;
+    private ArrayList<Body> bulletstoplaterone;
+    private ArrayList<Body> toberemoved;
+
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private TiledMap map;
+    private  CollisionListener c1;
+
 
     public boolean isPaused;
 
@@ -58,6 +69,22 @@ public class OasisMap implements Screen{
         p1tex = new Texture("Images/player1.png");
         p2tex = new Texture("Images/player2.png");
         pauseImage = new Texture("Images/PauseScreen.png");
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, w / SCALE, h / SCALE);
+
+        world = new World(new Vector2(0f,0f), false);
+        toberemoved = new ArrayList<>();
+        b2dr = new Box2DDebugRenderer();
+        c1 = new CollisionListener();
+        world.setContactListener(c1);
+        player1 = createBox(4f, 3f, 16f, 32f, false);
+        player1.setUserData(BodiesData.PLAYER1);
+        player2 = createBox(7f, 3f, 16f, 32f, false);
+        player2.setUserData(BodiesData.PLAYER2);
+        bulletstoplayertwo = new ArrayList<>();
+        bulletstoplaterone = new ArrayList<>();
+
 
         p1atlas = new TextureAtlas(Gdx.files.internal("PlayerTextures/wizard_m.atlas"));
         player1animation = new Animation(1f/4f, p1atlas.getRegions());
@@ -114,7 +141,7 @@ public class OasisMap implements Screen{
         }
         batch.end();
 
-
+        update(delta);
         b2dr.render(world, camera.combined.scl(PPM));
         if (isPaused) {
             delta = 0;
@@ -129,8 +156,26 @@ public class OasisMap implements Screen{
     public void update(float delta) {
         world.step(1/60f, 6,2);
 
+        toberemoved = c1.getbodies();
+        Iterator<Body> i = toberemoved.iterator();
+        if(!world.isLocked()){
+            while(i.hasNext()){
+                Body b = i.next();
+                if(bulletstoplayertwo.contains(b)) bulletstoplayertwo.remove(b);
+                if(bulletstoplaterone.contains(b)) bulletstoplaterone.remove(b);
+
+                world.destroyBody(b);
+                i.remove();
+            }
+        }
+
         inputUpdate(delta);
         cameraUpdate(delta);
+        for(Body b : bulletstoplayertwo){
+            update_Bullet(delta,b,player2);}
+        for(Body B : bulletstoplaterone){
+            update_Bullet(delta,B,player1);
+        }
         batch.setProjectionMatrix(camera.combined);
 
 //        playerDistance = (float) Math.sqrt(Math.pow((player2.getPosition().y - player1.getPosition().y), 2)
@@ -155,20 +200,40 @@ public class OasisMap implements Screen{
         int p2HorizontalForce = 0;
         int p2VerticalForce = 0;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.X)){ player2.setActive(false);}
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)){ player2.setActive(true);}
+        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+            player2.setActive(false);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+            player2.setActive(true);
+        }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D)){ p1HorizontalForce += 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.A)){ p1HorizontalForce -= 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){ p1VerticalForce += 1; }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)){ p1VerticalForce -= 1; }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            p1HorizontalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            p1HorizontalForce -= 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            p1VerticalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            p1VerticalForce -= 1;
+        }
         player1.setLinearVelocity(p1HorizontalForce * 5, p1VerticalForce * 5);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){ p2HorizontalForce += 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){ p2HorizontalForce -= 1;}
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)){ p2VerticalForce += 1; }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){ p2VerticalForce -= 1; }
-            player2.setLinearVelocity(p2HorizontalForce * 5, p2VerticalForce * 5);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            p2HorizontalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            p2HorizontalForce -= 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            p2VerticalForce += 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            p2VerticalForce -= 1;
+        }
+        player2.setLinearVelocity(p2HorizontalForce * 5, p2VerticalForce * 5);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
             isPaused = true;
@@ -179,9 +244,49 @@ public class OasisMap implements Screen{
         if (Gdx.input.isKeyPressed(Input.Keys.O))
             camera.zoom -= 0.02;
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            Bullet.createBullet(world, player1, player2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+
+            bullet = createBullet(world, player1,true);
+            bullet.setUserData(BodiesData.BULLET);
+            bulletstoplayertwo.add(bullet);
+
+            bullet1 = createBullet(world, player2,false);
+            bullet1.setUserData(BodiesData.BULLET1);
+            bulletstoplaterone.add(bullet1);
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)){
+            if(bullet != null){
+                world.destroyBody(bullet);
+                bulletstoplayertwo.remove(bullet);
+                bullet = null;}
+        }
+    }
+
+
+
+
+    public Body createBox(float x, float y, float width, float height, boolean isStatic) {
+        Body pBody;
+        BodyDef bodydef = new BodyDef();
+
+        if (isStatic)
+            bodydef.type = BodyDef.BodyType.StaticBody;
+        else
+            bodydef.type = BodyDef.BodyType.DynamicBody;
+
+
+        bodydef.position.set(x, y);
+        bodydef.fixedRotation = true;
+
+
+        pBody = world.createBody(bodydef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width / 2 / PPM,height / 2 / PPM);
+
+        pBody.createFixture(shape, 1f);
+        shape.dispose();
+        return pBody;
     }
 
     @Override
@@ -215,4 +320,41 @@ public class OasisMap implements Screen{
 
     }
 
+    public Body createBullet(World world, Body PointofOrigin,Boolean add) {
+        Body BulletBody;
+        BodyDef bodydef = new BodyDef();
+
+        bodydef.type = BodyDef.BodyType.KinematicBody;
+        bodydef.bullet = true;
+        float tobeadded = (add? 16.0f : -16.0f);
+        bodydef.position.set(PointofOrigin.getPosition().x + tobeadded/PPM , PointofOrigin.getPosition().y);
+        bodydef.fixedRotation = false;
+
+
+        BulletBody = world.createBody(bodydef);
+
+//        BulletBody.applyForceToCenter(new Vector2(
+//                player2.getPosition().x - player1.getPosition().x,
+//                player2.getPosition().y - player1.getPosition().y), false);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(4 / 2 / PPM,4 / 2 / PPM);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        BulletBody.createFixture(fixtureDef);
+//        BulletBody.setUserData(BodiesData.BULLET);
+
+        shape.dispose();
+        return BulletBody;
+    }
+    public void update_Bullet(float delta,Body bullet, Body Endpoint){
+        float x_position = Endpoint.getPosition().x - bullet.getPosition().x;
+        float y_position  = Endpoint.getPosition().y - bullet.getPosition().y;
+        float magnitude = (float) Math.pow(x_position*x_position + y_position*y_position,0.5);
+        float i_cap = x_position/magnitude;
+        float j_cap = y_position/magnitude;
+        bullet.setLinearVelocity(i_cap,j_cap);
+    }
 }
