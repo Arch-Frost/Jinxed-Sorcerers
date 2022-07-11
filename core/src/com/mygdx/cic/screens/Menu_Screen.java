@@ -1,22 +1,26 @@
 package com.mygdx.cic.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.cic.CIC;
 
 public class Menu_Screen  implements Screen {
+    Sound sound ;
     private CIC parent;
     private Stage stage;
     static boolean start_game=false;
-    static boolean open_controls=false;
+    static boolean open_controls_from_menu=false;
+    static boolean open_About=false;
     private Skin mySkin;
-    static int check=0;
     public Menu_Screen(CIC cic) {
         parent=cic;
 
@@ -30,16 +34,20 @@ public class Menu_Screen  implements Screen {
 
     @Override
     public void show() {
-
-        Texture texture = new Texture(Gdx.files.internal("d.jpg"));
+        final Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/g.wav"));
+        Texture texture = new Texture(Gdx.files.internal("BackgroundImages/MenuScreenBackground.jpg"));
         Image image1 = new Image(texture);
+        image1.setSize(1370,770);
         stage.addActor(image1);
-        mySkin = new Skin(Gdx.files.internal("skin/flat-earth-ui.json"));
-        Button Play_button = new TextButton("Play", mySkin, "default");
-        Play_button.setSize(160, 80);
-        Play_button.setPosition(90, 530);
 
-        Play_button.addListener(new InputListener() {
+
+        Texture PlayTexture = new Texture(Gdx.files.internal("Buttons/playButton.jpg"));
+        TextureRegion myPlayTextureRegion = new TextureRegion(PlayTexture);
+        TextureRegionDrawable myPlayTexRegionDrawable = new TextureRegionDrawable(myPlayTextureRegion);
+        ImageButton PlayButton = new ImageButton(myPlayTexRegionDrawable); //Set the button up
+        PlayButton.setPosition(808, 435);
+        PlayButton.setSize(265, 70);
+        PlayButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 start_game = true;
@@ -50,16 +58,19 @@ public class Menu_Screen  implements Screen {
                 return true;
             }
         });
-        stage.addActor(Play_button);
-        Button Controls_button = new TextButton("Controls", mySkin, "default");
-        Controls_button.setSize(160, 80);
-        Controls_button.setPosition(90, 400);
 
-        Controls_button.addListener(new InputListener() {
+        Texture ControlTexture = new Texture(Gdx.files.internal("Buttons/ControlsButton.jpg"));
+        TextureRegion myControlTextureRegion = new TextureRegion(ControlTexture);
+        TextureRegionDrawable myControlTexRegionDrawable = new TextureRegionDrawable(myControlTextureRegion);
+        ImageButton ControlButton = new ImageButton(myControlTexRegionDrawable); //Set the button up
+
+        ControlButton.setPosition(758, 345);
+        ControlButton.setSize(370, 45);
+        ControlButton.addListener(new InputListener() {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                 open_controls=true;
+                open_controls_from_menu=true;
             }
 
             @Override
@@ -69,14 +80,21 @@ public class Menu_Screen  implements Screen {
             }
         });
 
-        Button Exit_button = new TextButton("Exit", mySkin, "default");
-        Exit_button.setSize(160, 80);
-        Exit_button.setPosition(90, 270);
-        Exit_button.addListener(new InputListener() {
+
+
+        Texture AboutTexture = new Texture(Gdx.files.internal("Buttons/AboutButton.jpg"));
+        TextureRegion myAboutTextureRegion = new TextureRegion(AboutTexture);
+        TextureRegionDrawable myAboutTexRegionDrawable = new TextureRegionDrawable(myAboutTextureRegion);
+        ImageButton AboutButton = new ImageButton(myAboutTexRegionDrawable); //Set the button up
+
+        AboutButton.setPosition(763, 260);
+        AboutButton.setSize(370, 40);
+
+        AboutButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                          CIC.menu_screen.dispose();
-                          System.exit(0);
+                open_About=true;
+                sound.play(1.0f);
             }
 
             @Override
@@ -86,14 +104,27 @@ public class Menu_Screen  implements Screen {
         });
 
 
-        Button About_button = new TextButton("About", mySkin, "default");
-        About_button.setSize(160, 80);
-        About_button.setPosition(90, 140);
-        About_button.addListener(new InputListener() {
+
+
+
+
+
+
+
+
+        Texture ExitTexture = new Texture(Gdx.files.internal("Buttons/exitButton.jpg"));
+        TextureRegion myExitTextureRegion = new TextureRegion(ExitTexture);
+        TextureRegionDrawable myExitTexRegionDrawable = new TextureRegionDrawable(myExitTextureRegion);
+        ImageButton ExitButton = new ImageButton(myExitTexRegionDrawable); //Set the button up
+
+        ExitButton.setPosition(759, 175);
+        ExitButton.setSize(370, 45);
+        ExitButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                System.exit(0);}
 
-            }
+
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -101,56 +132,33 @@ public class Menu_Screen  implements Screen {
             }
         });
 
-        stage.addActor(Controls_button);
-        stage.addActor(Exit_button);
-        stage.addActor(About_button);
+        stage.addActor(PlayButton);
+        stage.addActor(ControlButton);
+        stage.addActor(AboutButton);
+        stage.addActor(ExitButton);
 
 
 
-        // Create a table that fills the screen. Everything else will go inside this table.
-//        Table table = new Table();
-//        table.setFillParent(true);
-//        table.setDebug(true);
-//        stage.addActor(table);
-//
-//        Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-//
-//        TextButton newGame = new TextButton("New Game", skin);
-//        TextButton preferences = new TextButton("Preferences", skin);
-//        TextButton exit = new TextButton("Exit", skin);
-//        newGame.addListener(new InputListener() {
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                start_game=true;
-//            }
-//
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                return true;
-//            }
-//        });
-//        table.add(newGame).fillX().uniformX();
-//        table.row().pad(10, 0, 10, 0);
-//        table.add(preferences).fillX().uniformX();
-//        table.row();
-//        table.add(exit).fillX().uniformX();
-
-
-//        private TextButton addbutton (String name){
-///            return button;
-//        }
     }
 
         @Override
         public void render ( float delta){
             if(start_game){
+                start_game=false;
+                CIC.game_screen=new GameScreen(parent);
                 parent.changeScreen(CIC.G_screen);
             }
-            if (open_controls){
-                open_controls=false;
+            if (open_controls_from_menu){
+
                 CIC.controls_screen=new Controls_Screen(parent);
                 parent.changeScreen(CIC.C_screen);
             }
+            if (open_About){
+                open_About=false;
+                CIC.about_screen=new About_Screen(parent);
+                parent.changeScreen(CIC.A_screen);
+            }
+
             Gdx.gl.glClearColor(1, 1, 1, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             stage.act();

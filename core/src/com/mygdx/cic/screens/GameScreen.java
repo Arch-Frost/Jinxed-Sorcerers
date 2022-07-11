@@ -1,9 +1,9 @@
 package com.mygdx.cic.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +23,7 @@ import static com.mygdx.cic.utils.Constants.PPM;
 public class GameScreen implements Screen {
     private final float SCALE = 2;
     private float playerDistance;
-
+    static boolean pause_game=false;
     private SpriteBatch batch;
     private Texture p1tex;
     private Texture p2tex;
@@ -69,6 +69,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if(pause_game){
+            pause_game=false;
+            CIC.pause_screen=new Pause_Screen(parent);
+            parent.changeScreen(CIC.P_screen);
+        }
         Gdx.gl.glClearColor(0.6f,0f,0.8f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -147,6 +152,13 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.A)){ p1HorizontalForce -= 1;}
         if (Gdx.input.isKeyPressed(Input.Keys.W)){ p1VerticalForce += 1; }
         if (Gdx.input.isKeyPressed(Input.Keys.S)){ p1VerticalForce -= 1; }
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            pause_game=true;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.BUTTON_Y)){
+            CIC.game_screen.resume();
+        }
+
         player1.setLinearVelocity(p1HorizontalForce * 5, p1VerticalForce * 5);
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){ p2HorizontalForce += 1;}
