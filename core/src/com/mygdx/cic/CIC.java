@@ -63,23 +63,21 @@ public class CIC extends Game {
 
 
 
-		pause_screen=new Pause_Screen(this);
-
-		option_screen=new Option_Screen(this);
 
 
 
 //	about_screen =new About_Screen(this);
 
-		loading_screen=new Loading_Screen(this);
 
 
 
-		controls_screen=new Controls_Screen(this);
 
-		about_screen=new About_Screen(this);
+
+
+
 		menu_screen=new Menu_Screen(this);
-		setScreen(menu_screen);
+		loading_screen=new Loading_Screen(this);
+		setScreen(loading_screen);
 
 		//		if (scrn2.new_screen){
 //			System.out.println("inside cic gamescreen");

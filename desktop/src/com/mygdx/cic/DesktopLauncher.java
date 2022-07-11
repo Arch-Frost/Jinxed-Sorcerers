@@ -1,5 +1,7 @@
 package com.mygdx.cic;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
@@ -11,6 +13,8 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("CIC");
 		config.setMaximized(true);
+		config.setResizable(false);
+		//config.setFullscreenMode();
 		new Lwjgl3Application(new CIC(), config);
 	}
 }

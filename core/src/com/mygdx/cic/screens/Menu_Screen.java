@@ -18,7 +18,7 @@ public class Menu_Screen  implements Screen {
     private CIC parent;
     private Stage stage;
     static boolean start_game=false;
-    static boolean open_controls_from_menu=false;
+    static boolean open_controls=false;
     static boolean open_About=false;
     private Skin mySkin;
     public Menu_Screen(CIC cic) {
@@ -34,7 +34,7 @@ public class Menu_Screen  implements Screen {
 
     @Override
     public void show() {
-        final Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/g.wav"));
+        //   final Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/g.wav"));
         Texture texture = new Texture(Gdx.files.internal("BackgroundImages/MenuScreenBackground.jpg"));
         Image image1 = new Image(texture);
         image1.setSize(1370,770);
@@ -45,7 +45,7 @@ public class Menu_Screen  implements Screen {
         TextureRegion myPlayTextureRegion = new TextureRegion(PlayTexture);
         TextureRegionDrawable myPlayTexRegionDrawable = new TextureRegionDrawable(myPlayTextureRegion);
         ImageButton PlayButton = new ImageButton(myPlayTexRegionDrawable); //Set the button up
-        PlayButton.setPosition(808, 435);
+        PlayButton.setPosition(788, 440);
         PlayButton.setSize(265, 70);
         PlayButton.addListener(new InputListener() {
             @Override
@@ -64,13 +64,13 @@ public class Menu_Screen  implements Screen {
         TextureRegionDrawable myControlTexRegionDrawable = new TextureRegionDrawable(myControlTextureRegion);
         ImageButton ControlButton = new ImageButton(myControlTexRegionDrawable); //Set the button up
 
-        ControlButton.setPosition(758, 345);
+        ControlButton.setPosition(732, 345);
         ControlButton.setSize(370, 45);
         ControlButton.addListener(new InputListener() {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                open_controls_from_menu=true;
+                open_controls=true;
             }
 
             @Override
@@ -87,14 +87,14 @@ public class Menu_Screen  implements Screen {
         TextureRegionDrawable myAboutTexRegionDrawable = new TextureRegionDrawable(myAboutTextureRegion);
         ImageButton AboutButton = new ImageButton(myAboutTexRegionDrawable); //Set the button up
 
-        AboutButton.setPosition(763, 260);
-        AboutButton.setSize(370, 40);
+        AboutButton.setPosition(763, 265);
+        AboutButton.setSize(310, 35);
 
         AboutButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 open_About=true;
-                sound.play(1.0f);
+              //  sound.play(1.0f);
             }
 
             @Override
@@ -117,8 +117,8 @@ public class Menu_Screen  implements Screen {
         TextureRegionDrawable myExitTexRegionDrawable = new TextureRegionDrawable(myExitTextureRegion);
         ImageButton ExitButton = new ImageButton(myExitTexRegionDrawable); //Set the button up
 
-        ExitButton.setPosition(759, 175);
-        ExitButton.setSize(370, 45);
+        ExitButton.setPosition(770, 180);
+        ExitButton.setSize(300, 35);
         ExitButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -148,8 +148,8 @@ public class Menu_Screen  implements Screen {
                 CIC.game_screen=new GameScreen(parent);
                 parent.changeScreen(CIC.G_screen);
             }
-            if (open_controls_from_menu){
-
+            if (open_controls){
+                open_controls=false;
                 CIC.controls_screen=new Controls_Screen(parent);
                 parent.changeScreen(CIC.C_screen);
             }

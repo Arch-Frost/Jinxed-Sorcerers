@@ -14,22 +14,22 @@ com.badlogic.gdx.graphics.Color: {
 		b: 0
 		a: 1
 	}
-	black: {
+	cyan: {
 		r: 0
-		g: 0
-		b: 0
+		g: 1
+		b: 0.99166656
 		a: 1
 	}
-	black: {
+	dark-cyan: {
 		r: 0
-		g: 0
-		b: 0
+		g: 0.39373153
+		b: 0.4333333
 		a: 1
 	}
-	black: {
-		r: 0
-		g: 0
-		b: 0
+	white: {
+		r: 1
+		g: 1
+		b: 1
 		a: 1
 	}
 }
