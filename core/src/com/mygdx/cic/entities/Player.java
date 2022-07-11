@@ -1,4 +1,4 @@
-package com.mygdx.cic.bodies;
+package com.mygdx.cic.entities;
 
 import com.badlogic.gdx.physics.box2d.*;
 

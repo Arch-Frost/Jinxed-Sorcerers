@@ -5,11 +5,11 @@ import com.badlogic.gdx.physics.box2d.*;
 import java.util.ArrayList;
 
 public class CollisionListener implements ContactListener {
-    private ArrayList<Body> bodiestoberemoved ;
+    private ArrayList<Body> bodiesToBeRemoved;
 
     public CollisionListener(){
         super();
-        bodiestoberemoved = new ArrayList<>();
+        bodiesToBeRemoved = new ArrayList<>();
     }
     @Override
     public void beginContact(Contact contact) {
@@ -18,26 +18,26 @@ public class CollisionListener implements ContactListener {
         Body b = contact.getFixtureB().getBody();
         System.out.println("Collision between " + a.getUserData() + " and " + b.getUserData());
         if(a.getUserData() == BodiesData.PLAYER2 && b.getUserData() == BodiesData.BULLET){
-            if(!bodiestoberemoved.contains(b)) bodiestoberemoved.add(b);
+            if(!bodiesToBeRemoved.contains(b)) bodiesToBeRemoved.add(b);
 
         }
         if(a.getUserData() == BodiesData.BULLET && b.getUserData() == BodiesData.PLAYER2){
-            if(!bodiestoberemoved.contains(a)) bodiestoberemoved.add(a);
+            if(!bodiesToBeRemoved.contains(a)) bodiesToBeRemoved.add(a);
 
         }
         if(a.getUserData() == BodiesData.PLAYER1 && b.getUserData() == BodiesData.BULLET1){
-            if(!bodiestoberemoved.contains(b)) bodiestoberemoved.add(b);
+            if(!bodiesToBeRemoved.contains(b)) bodiesToBeRemoved.add(b);
 
         }
         if(a.getUserData() == BodiesData.BULLET1 && b.getUserData() == BodiesData.PLAYER1){
-            if(!bodiestoberemoved.contains(a)) bodiestoberemoved.add(a);
+            if(!bodiesToBeRemoved.contains(a)) bodiesToBeRemoved.add(a);
 
         }
 
 
     }
     public ArrayList<Body> getbodies (){
-        return bodiestoberemoved;
+        return bodiesToBeRemoved;
     }
 
     @Override
