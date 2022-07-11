@@ -5,13 +5,13 @@ import com.badlogic.gdx.physics.box2d.*;
 import static com.mygdx.cic.utils.Constants.PPM;
 
 public class Player {
-    public Body Body;
+    public static Body Body;
 
     public Player(World world, float x, float y, float width, float height, boolean isStatic) {
         createBox(world, x, y, width, height, isStatic);
     }
 
-    public Body createBox(World world, float x, float y, float width, float height, boolean isStatic) {
+    public static Body createBox(World world, float x, float y, float width, float height, boolean isStatic) {
         BodyDef bodydef = new BodyDef();
 
         if (isStatic)
@@ -33,7 +33,7 @@ public class Player {
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
 
-        Body.createFixture(fixtureDef).setUserData(this);
+        Body.createFixture(fixtureDef);
         shape.dispose();
         return Body;
     }
