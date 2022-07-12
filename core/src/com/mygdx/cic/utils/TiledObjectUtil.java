@@ -11,6 +11,7 @@ import static com.mygdx.cic.utils.Constants.PPM;
 
 public class TiledObjectUtil {
     public static void parseTiledObjectLayer(World world, MapObjects objects) {
+        try{
         for (MapObject object: objects) {
             Shape shape;
             if (object instanceof PolylineMapObject) {
@@ -38,6 +39,11 @@ public class TiledObjectUtil {
             body.createFixture(shape, 1.0f);
             body.setUserData(BodiesData.TILEDMAP);
             shape.dispose();
+        }}
+        catch (Exception e){
+            System.out.println("Error handling Map Objects!");
+            e.printStackTrace();
+            System.exit(1);
         }
     }
     

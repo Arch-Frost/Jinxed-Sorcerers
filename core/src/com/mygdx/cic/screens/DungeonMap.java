@@ -138,6 +138,7 @@ public class DungeonMap implements Screen{
 
     @Override
     public void render(float delta) {
+        try{
 //        Gdx.gl.glClearColor(0.08f,0.42f,0.597f, 1f); // Green Map
         Gdx.gl.glClearColor(1f,0.328f,0.257f, 1f); // Dark Map
 //        Gdx.gl.glClearColor(0.4f,0f,0.8f, 1f);
@@ -174,17 +175,21 @@ public class DungeonMap implements Screen{
             pause();
         } else {
             update(delta);
+        }}
+        catch (Exception e){
+            System.out.println("Error cannot render Correcty!!!");
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 
 
     public void update(float delta) {
+        try{
         world.step(1/60f, 6,2);
-
 //        System.out.println("Player 1: x: " + player1.getPosition().x +" y: " + player1.getPosition().y);
 //        System.out.println("Player 2: x: " + player2.getPosition().x +" y: " + player2.getPosition().y);
 //        System.out.println("Camera Zoom: " + camera.zoom);
-
         toberemoved = listener.getBodies();
         Iterator<Body> i = toberemoved.iterator();
         if(!world.isLocked()){
@@ -201,10 +206,7 @@ public class DungeonMap implements Screen{
                 i.remove();
             }
         }
-//        tempDistance = playerDistance;
         playerDistance = Vector2.dst2(player1.getPosition().x, player1.getPosition().y, player2.getPosition().x, player2.getPosition().y);
-//        System.out.println("Player Distance: " + playerDistance);
-
         inputUpdate(delta);
         cameraUpdate(delta);
         for(Body b : bulletsToPlayerTwo){
@@ -216,11 +218,19 @@ public class DungeonMap implements Screen{
             Enemy.update(delta, enemy, player1, 1, true);
         }
 //        Enemy.updateEnemy(delta, demon, player1);
-
         batch.setProjectionMatrix(camera.combined);
-
         mapRenderer.setView(camera);
-        Save.gd.setTenativeScore(score);
+        Save.gd.setTenativeScore(score);}
+        catch (NullPointerException e){
+            System.out.println("Entity has already been destroyed.");
+            e.printStackTrace();
+            Gdx.app.exit();
+        }
+        catch (IndexOutOfBoundsException e){
+            System.out.println("Arrays are not sorted correctly.");
+            e.printStackTrace();
+            Gdx.app.exit();
+        }
     }
 
     public void cameraUpdate(float delta) {

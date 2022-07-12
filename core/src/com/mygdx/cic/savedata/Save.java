@@ -1,10 +1,6 @@
 package com.mygdx.cic.savedata;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 import com.badlogic.gdx.Gdx;
 
@@ -20,10 +16,15 @@ public class Save {
             out.writeObject(gd);
             out.close();
         }
-        catch(Exception e) {
+        catch(IOException e) {
+            System.out.println("Error Opening FIle!");
+            e.printStackTrace();
+            Gdx.app.exit();
+        } catch(Exception e) {
             e.printStackTrace();
             Gdx.app.exit();
         }
+
     }
 
     public static void load() {
@@ -37,8 +38,20 @@ public class Save {
             );
             gd = (GameData) in.readObject();
             in.close();
+        } catch(EOFException e) {
+            System.out.println("End of file is reached!");
+            e.printStackTrace();
+            Gdx.app.exit();
+        } catch(IOException e) {
+            System.out.println("Error Opening FIle!");
+            e.printStackTrace();
+            Gdx.app.exit();
         }
-        catch(Exception e) {
+        catch(ClassNotFoundException e) {
+            System.out.println("Class used in Serialization cannot be located");
+            e.printStackTrace();
+            Gdx.app.exit();
+        } catch(Exception e) {
             e.printStackTrace();
             Gdx.app.exit();
         }
