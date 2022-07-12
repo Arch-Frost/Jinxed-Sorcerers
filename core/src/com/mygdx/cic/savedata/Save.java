@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 public class Save {
 
     public static GameData gd;
+    public static int enemiesKilled = 0;
+    public static long timeSurvived = 0;
 
     public static void save() {
         try {

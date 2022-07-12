@@ -39,6 +39,7 @@ public class DungeonMap implements Screen{
     private float tempDistance;
     private float elapsedTime = 0f;
     private int score;
+    private long startTime = System.currentTimeMillis();
 
     private SpriteBatch batch;
     private Texture pauseImage;
@@ -60,7 +61,6 @@ public class DungeonMap implements Screen{
     private Body player2;
     private Body bullet;
     private Body bullet1;
-    private Body demon;
     private ArrayList<Body> bulletsToPlayerTwo;
     private ArrayList<Body> bulletsToPlayerOne;
     private ArrayList<Body> allEnemies;
@@ -75,7 +75,8 @@ public class DungeonMap implements Screen{
     public boolean isPaused;
     private Body enemy;
 
-    public DungeonMap(CIC cic) {
+    public DungeonMap(CIC cic)
+    {
         parent = cic;
     }
 
@@ -111,7 +112,7 @@ public class DungeonMap implements Screen{
 
         world = new World(new Vector2(0f,0f), false);
         b2dr = new Box2DDebugRenderer();
-        listener = new CollisionListener();
+        listener = new CollisionListener(parent);
         world.setContactListener(listener);
 
         toberemoved = new ArrayList<>();
@@ -127,16 +128,12 @@ public class DungeonMap implements Screen{
         player1.setUserData(BodiesData.PLAYER1);
         player2 = Player.create(world, 41f, 5f, 16f, 16f, false);
         player2.setUserData(BodiesData.PLAYER2);
-//        demon = Enemy.createBody(world, 25.5f, 45.8f, 4f, 4f);
-//        demon.setUserData(BodiesData.ENEMY);
+
 
         map = new TmxMapLoader().load("DungeonMap/dungeon.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
-
         TiledObjectUtil.parseTiledObjectLayer(world, map.getLayers().get("collision-layer").getObjects());
-
         camera.zoom = 2.5f;
-
         Save.load();
         score = (int) Save.gd.getTentativeScore();
 
@@ -150,9 +147,7 @@ public class DungeonMap implements Screen{
 //        Gdx.gl.glClearColor(0.4f,0f,0.8f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         elapsedTime += delta;
-
-                mapRenderer.render();
-
+        mapRenderer.render();
         batch.begin();
         batch.draw(player1Animation.getKeyFrame(elapsedTime,true), (player1.getPosition().x * PPM) - (player1Animation.getKeyFrame(elapsedTime).getRegionWidth() / 2), player1.getPosition().y * PPM - (player1Animation.getKeyFrame(elapsedTime).getRegionHeight() / 2));
         batch.draw(player2Animation.getKeyFrame(elapsedTime,true), (player2.getPosition().x * PPM) - (player2Animation.getKeyFrame(elapsedTime).getRegionWidth() / 2), player2.getPosition().y * PPM - (player2Animation.getKeyFrame(elapsedTime).getRegionHeight() / 2));
@@ -166,15 +161,12 @@ public class DungeonMap implements Screen{
         for (Body enemy : allEnemies) {
             batch.draw(demonAnimation.getKeyFrame(elapsedTime,true), (enemy.getPosition().x * PPM) - (demonAnimation.getKeyFrame(elapsedTime).getRegionWidth() / 2), enemy.getPosition().y * PPM - (demonAnimation.getKeyFrame(elapsedTime).getRegionHeight() / 2));
         }
-
         if (isPaused) {
             batch.setProjectionMatrix(cameraUnprojected.combined);
             batch.draw(pauseImage, 0f, 0f, cameraUnprojected.viewportWidth, cameraUnprojected.viewportHeight);
             batch.setProjectionMatrix(camera.combined);
         }
         batch.end();
-
-
 //        b2dr.render(world, camera.combined.scl(PPM));
         if (isPaused) {
             delta = 0;
@@ -193,6 +185,11 @@ public class DungeonMap implements Screen{
     public void update(float delta) {
         try{
         world.step(1/60f, 6,2);
+
+        if (!isPaused) {
+            Save.timeSurvived = System.currentTimeMillis() - startTime;
+        }
+
 //        System.out.println("Player 1: x: " + player1.getPosition().x +" y: " + player1.getPosition().y);
 //        System.out.println("Player 2: x: " + player2.getPosition().x +" y: " + player2.getPosition().y);
 //        System.out.println("Camera Zoom: " + camera.zoom);
@@ -206,13 +203,16 @@ public class DungeonMap implements Screen{
                 if(allEnemies.contains(b)) {
                     allEnemies.remove(b);
                     score += 1;
+                    Save.enemiesKilled += 1;
                 }
 
                 world.destroyBody(b);
                 i.remove();
             }
         }
+//        tempDistance = playerDistance;
         playerDistance = Vector2.dst2(player1.getPosition().x, player1.getPosition().y, player2.getPosition().x, player2.getPosition().y);
+//        System.out.println("Player Distance: " + playerDistance);
         inputUpdate(delta);
         cameraUpdate(delta);
         for(Body b : bulletsToPlayerTwo){
@@ -223,7 +223,6 @@ public class DungeonMap implements Screen{
         for(Body enemy : allEnemies){
             Enemy.update(delta, enemy, player1, 1, true);
         }
-//        Enemy.updateEnemy(delta, demon, player1);
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
         Save.gd.setTenativeScore(score);}
@@ -245,7 +244,6 @@ public class DungeonMap implements Screen{
         position.y = (player1.getPosition().y + player2.getPosition().y)/2 * PPM   ;
         camera.position.set(position);
 
-//       do {camera.zoom = 2.5f;} while (false);
 
 //        while (tempDistance < playerDistance) {
 //            camera.zoom += 0.2;

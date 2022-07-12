@@ -17,6 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.cic.CIC;
+import com.mygdx.cic.savedata.Save;
+
+import java.util.concurrent.TimeUnit;
 
 public class Game_OverScreen implements Screen {
     private CIC parent;
@@ -84,14 +87,15 @@ public class Game_OverScreen implements Screen {
         Game_over_l.setAlignment(Align.center);
         Game_over_l.setFontScale(2.5f);
         stage.addActor(Game_over_l);
-        Label Score = new Label("Score", mySkin,"default");
+        Label Score = new Label("Latest Score", mySkin,"default");
         Score.setSize(200, 100);
         Score.setPosition(360,230);
         Score.setColor(Color.BLACK);
         Score.setAlignment(Align.center);
         Score.setFontScale(1.5f);
         stage.addActor(Score);
-        Label Score1 = new Label("S", mySkin,"default");
+        Label Score1 = new Label(Long.toString(Save.gd.getTentativeScore()), mySkin,"default");
+        Save.save();
         Score1.setSize(200, 100);
         Score1.setPosition(710,230);
         Score1.setColor(Color.BLACK);
@@ -105,7 +109,7 @@ public class Game_OverScreen implements Screen {
         EnemiesKilled.setAlignment(Align.center);
         EnemiesKilled.setFontScale(1.5f);
         stage.addActor(EnemiesKilled);
-        Label EnemiesKilled1 = new Label("E", mySkin,"default");
+        Label EnemiesKilled1 = new Label(Integer.toString(Save.enemiesKilled), mySkin,"default");
         EnemiesKilled1.setSize(200, 100);
         EnemiesKilled1.setPosition(710,170);
         EnemiesKilled1.setColor(Color.BLACK);
@@ -119,7 +123,9 @@ public class Game_OverScreen implements Screen {
         Time_Played.setAlignment(Align.center);
         Time_Played.setFontScale(1.5f);
         stage.addActor(Time_Played);
-        Label Time_Played1 = new Label("T", mySkin,"default");
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(Save.timeSurvived);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(Save.timeSurvived) - (minutes * 60);
+        Label Time_Played1 = new Label((minutes + " Min " + seconds + " Seconds"), mySkin,"default");
         Time_Played1.setSize(200, 100);
         Time_Played1.setPosition(710,110);
         Time_Played1.setColor(Color.BLACK);

@@ -1,7 +1,10 @@
 package com.mygdx.cic.utils;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.cic.CIC;
 import com.mygdx.cic.savedata.Save;
+import com.mygdx.cic.screens.Game_OverScreen;
+import com.mygdx.cic.screens.Menu_Screen;
 
 import java.util.ArrayList;
 
@@ -10,9 +13,11 @@ import static com.mygdx.cic.utils.BodiesData.BULLET1;
 
 public class CollisionListener implements ContactListener {
     private ArrayList<Body> bodiesToBeRemoved;
+    private CIC parent;
 
-    public CollisionListener(){
+    public CollisionListener(CIC cic){
         super();
+        this.parent = cic;
         bodiesToBeRemoved = new ArrayList<>();
     }
     @Override
@@ -50,12 +55,12 @@ public class CollisionListener implements ContactListener {
                 }
             }
             if (a.getUserData() == ENEMY && b.getUserData() == PLAYER1) {
-                System.out.println("Game Over. Final Score: " + Save.gd.getTentativeScore());
-                System.exit(0);
+                CIC.game_overScreen=new Game_OverScreen(parent);
+                parent.changeScreen(CIC.GO_screen);
             }
             if (b.getUserData() == ENEMY && a.getUserData() == PLAYER1) {
-                System.out.println("Game Over. Final Score: " + Save.gd.getTentativeScore());
-                System.exit(0);
+                CIC.game_overScreen=new Game_OverScreen(parent);
+                parent.changeScreen(CIC.GO_screen);
             }
         }
         catch (NullPointerException e){

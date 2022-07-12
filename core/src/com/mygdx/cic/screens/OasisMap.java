@@ -33,6 +33,7 @@ public class OasisMap implements Screen{
     private float tempDistance;
     private float elapsedTime = 0f;
     private int score;
+    private long startTime = System.currentTimeMillis();
 
     private SpriteBatch batch;
     private Texture pauseImage;
@@ -54,7 +55,6 @@ public class OasisMap implements Screen{
     private Body player2;
     private Body bullet;
     private Body bullet1;
-    private Body demon;
     private ArrayList<Body> bulletsToPlayerTwo;
     private ArrayList<Body> bulletsToPlayerOne;
     private ArrayList<Body> allEnemies;
@@ -106,7 +106,7 @@ public class OasisMap implements Screen{
 
         world = new World(new Vector2(0f,0f), false);
         b2dr = new Box2DDebugRenderer();
-        listener = new CollisionListener();
+        listener = new CollisionListener(parent);
         world.setContactListener(listener);
 
         toberemoved = new ArrayList<>();
@@ -180,6 +180,10 @@ public class OasisMap implements Screen{
     public void update(float delta) {
         try{
         world.step(1/60f, 6,2);
+
+        if (!isPaused) {
+            Save.timeSurvived = System.currentTimeMillis() - startTime;
+        }
 //        System.out.println("Player 1: x: " + player1.getPosition().x +" y: " + player1.getPosition().y);
 //        System.out.println("Player 2: x: " + player2.getPosition().x +" y: " + player2.getPosition().y);
 //        System.out.println("Camera Zoom: " + camera.zoom);
@@ -193,6 +197,7 @@ public class OasisMap implements Screen{
                 if(allEnemies.contains(b)) {
                     allEnemies.remove(b);
                     score += 1;
+                    Save.enemiesKilled += 1;
                 }
 
                 world.destroyBody(b);
