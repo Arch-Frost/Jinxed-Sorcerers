@@ -11,6 +11,13 @@ public class CIC extends Game {
 	public static GameScreen game_screen;
 	public static Controls_Screen controls_screen;
 	public static About_Screen about_screen;
+	public static Maps_Screen maps_screen;
+	public static OasisMap oasisMap;
+	public static DungeonMap dungeonMap;
+	public static Game_OverScreen game_overScreen;
+	public static Logo_Screen logo_screen;
+	public static Animation_Screen animation_screen;
+
 
 
 	public final static int L_screen = 0;
@@ -18,6 +25,11 @@ public class CIC extends Game {
 	public final static int G_screen = 2;
 	public final static int C_screen = 3;
 	public final static int A_screen = 4;
+	public final static int O_screen = 5;
+	public final static int D_screen = 6;
+	public final static int GO_screen = 7;
+	public final static int LO_screen = 8;
+	public final static int AN_screen = 9;
 
 
 
@@ -32,9 +44,9 @@ public class CIC extends Game {
 				this.setScreen(menu_screen);
 				break;
 			case G_screen:
-				if(game_screen == null)
-				{game_screen = new GameScreen(this);}
-				this.setScreen(game_screen);
+				if(maps_screen == null)
+				{maps_screen = new Maps_Screen(this);}
+				this.setScreen(maps_screen);
 				break;
 			case C_screen:
 				if(controls_screen == null) controls_screen = new Controls_Screen(this);
@@ -44,7 +56,26 @@ public class CIC extends Game {
 				if(about_screen == null) about_screen = new About_Screen(this);
 				this.setScreen(about_screen);
 				break;
-
+			case  O_screen:
+				if(oasisMap == null) oasisMap = new OasisMap(this);
+				this.setScreen(oasisMap);
+				break;
+			case  D_screen:
+				if(dungeonMap == null) dungeonMap = new DungeonMap(this);
+				this.setScreen(dungeonMap);
+				break;
+			case  GO_screen:
+				if(game_overScreen == null) game_overScreen = new Game_OverScreen(this);
+				this.setScreen(game_overScreen);
+				break;
+			case  LO_screen:
+				if(logo_screen == null) logo_screen = new Logo_Screen(this);
+				this.setScreen(logo_screen);
+				break;
+			case  AN_screen:
+				if(animation_screen == null) animation_screen = new Animation_Screen(this);
+				this.setScreen(animation_screen);
+				break;
 		}
 	}
 	@Override

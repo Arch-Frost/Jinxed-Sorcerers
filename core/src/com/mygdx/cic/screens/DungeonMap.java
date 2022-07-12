@@ -131,7 +131,7 @@ public class DungeonMap implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         elapsedTime += delta;
 
-        mapRenderer.render();
+                mapRenderer.render();
 
         batch.begin();
         batch.draw(player1animation.getKeyFrame(elapsedTime,true), (player1.getPosition().x * PPM) - (player1animation.getKeyFrame(elapsedTime).getRegionWidth() / 2), player1.getPosition().y * PPM - (player1animation.getKeyFrame(elapsedTime).getRegionHeight() / 2));
@@ -201,7 +201,7 @@ public class DungeonMap implements Screen{
         position.y = (player1.getPosition().y + player2.getPosition().y)/2 * PPM;
         camera.position.set(position);
 
-        do {camera.zoom = 2.5f;} while (false);
+//       do {camera.zoom = 2.5f;} while (false);
 
         camera.update();
     }

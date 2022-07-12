@@ -64,7 +64,8 @@ public class OasisMap implements Screen{
 
     public boolean isPaused;
 
-    public OasisMap(CIC cic) {
+    public OasisMap(CIC cic)
+    {
         parent = cic;
     }
 
@@ -156,7 +157,7 @@ public class OasisMap implements Screen{
         batch.end();
 
 
-        b2dr.render(world, camera.combined.scl(PPM));
+        //b2dr.render(world, camera.combined.scl(PPM));
         if (isPaused) {
             delta = 0;
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))

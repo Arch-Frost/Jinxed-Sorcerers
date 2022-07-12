@@ -17,7 +17,7 @@ public class Menu_Screen  implements Screen {
     Sound sound ;
     private CIC parent;
     private Stage stage;
-    static boolean start_game=false;
+    static boolean open_maps_menu=false;
     static boolean open_controls=false;
     static boolean open_About=false;
     private Skin mySkin;
@@ -45,12 +45,12 @@ public class Menu_Screen  implements Screen {
         TextureRegion myPlayTextureRegion = new TextureRegion(PlayTexture);
         TextureRegionDrawable myPlayTexRegionDrawable = new TextureRegionDrawable(myPlayTextureRegion);
         ImageButton PlayButton = new ImageButton(myPlayTexRegionDrawable); //Set the button up
-        PlayButton.setPosition(788, 440);
+        PlayButton.setPosition(810, 440);
         PlayButton.setSize(265, 70);
         PlayButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                start_game = true;
+                open_maps_menu = true;
             }
 
             @Override
@@ -64,7 +64,7 @@ public class Menu_Screen  implements Screen {
         TextureRegionDrawable myControlTexRegionDrawable = new TextureRegionDrawable(myControlTextureRegion);
         ImageButton ControlButton = new ImageButton(myControlTexRegionDrawable); //Set the button up
 
-        ControlButton.setPosition(732, 345);
+        ControlButton.setPosition(754, 345);
         ControlButton.setSize(370, 45);
         ControlButton.addListener(new InputListener() {
 
@@ -87,7 +87,7 @@ public class Menu_Screen  implements Screen {
         TextureRegionDrawable myAboutTexRegionDrawable = new TextureRegionDrawable(myAboutTextureRegion);
         ImageButton AboutButton = new ImageButton(myAboutTexRegionDrawable); //Set the button up
 
-        AboutButton.setPosition(763, 265);
+        AboutButton.setPosition(785, 265);
         AboutButton.setSize(310, 35);
 
         AboutButton.addListener(new InputListener() {
@@ -117,7 +117,7 @@ public class Menu_Screen  implements Screen {
         TextureRegionDrawable myExitTexRegionDrawable = new TextureRegionDrawable(myExitTextureRegion);
         ImageButton ExitButton = new ImageButton(myExitTexRegionDrawable); //Set the button up
 
-        ExitButton.setPosition(770, 180);
+        ExitButton.setPosition(792, 180);
         ExitButton.setSize(300, 35);
         ExitButton.addListener(new InputListener() {
             @Override
@@ -143,9 +143,9 @@ public class Menu_Screen  implements Screen {
 
         @Override
         public void render ( float delta){
-            if(start_game){
-                start_game=false;
-                CIC.game_screen=new GameScreen(parent);
+            if(open_maps_menu){
+                open_maps_menu=false;
+                CIC.maps_screen=new Maps_Screen(parent);
                 parent.changeScreen(CIC.G_screen);
             }
             if (open_controls){

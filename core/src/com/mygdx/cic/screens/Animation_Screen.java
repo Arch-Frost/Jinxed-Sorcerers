@@ -1,56 +1,44 @@
 package com.mygdx.cic.screens;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-//import com.mygdx.template.GameConstants;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.cic.CIC;
 
-
-public  class Loading_Screen implements Screen {
+public class Animation_Screen implements Screen {
     private TextureRegion trr;
     private CIC parent;
     private Stage stage;
     private Animation animation;
     private SpriteBatch batch;
-
     float time = 0;
     private float origin_x, origin_y;
-    public Loading_Screen(CIC cic){
-
+    public Animation_Screen(CIC cic){
         parent=cic;
     }
-
-
-
     @Override
     public void show() {
 
-                stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ScreenViewport());
 
-                TextureRegion [] textrarray=new TextureRegion[21];
-                for (int i=0;i<=20;i++){
-                    textrarray[i]=new TextureRegion(new Texture(Gdx.files.internal("Loadingscreenimages/"+(String.valueOf(i)+".jpg"))));
-                }
+        TextureRegion [] textarray=new TextureRegion[21];
+        for (int i=0;i<=20;i++){
+            textarray[i]=new TextureRegion(new Texture(Gdx.files.internal("MapsImages/"+(String.valueOf(i)+".png"))));
+        }
 
-        animation=new Animation(0.1f,textrarray);
-        TextureRegion firstTexture = textrarray[0];
+        animation=new Animation(0.1f,textarray);
+        TextureRegion firstTexture = textarray[0];
         origin_x = (Gdx.graphics.getWidth()  - firstTexture.getRegionWidth())  / 2;
         origin_y = (Gdx.graphics.getHeight() - firstTexture.getRegionHeight()) / 2;
 
 
-           batch=new SpriteBatch();
-
+        batch=new SpriteBatch();
     }
 
     @Override
@@ -64,19 +52,22 @@ public  class Loading_Screen implements Screen {
         stage.act();
 
         batch.draw(trr,0,0,1370,770);
+        batch.draw(trr,0,0,1370,770);
+        batch.draw(trr,0,0,1370,770);
+        batch.draw(trr,0,0,1370,770);
+
         batch.end();
         stage.draw();
-        if (time > 3) // If 5s happened
+        if (time > 5)
         {
-            parent.changeScreen(CIC.AN_screen);
+            parent.changeScreen(CIC.LO_screen);
         }
-
-
-
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+
+    }
 
     @Override
     public void pause() {

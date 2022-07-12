@@ -2,6 +2,7 @@ package com.mygdx.cic.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -42,43 +43,51 @@ public class About_Screen implements Screen {
         Label insta2 = new Label("Ahmed Zafar : notahmad152", mySkin,"default");
         Label insta3 = new Label("Adeel Ahmed : ....................", mySkin,"default");
         discription1.setSize(200, 100);
-        discription1.setPosition(540,315);
+        discription1.setPosition(545,315);
         discription1.setAlignment(Align.center);
         discription1.setFontScale(1.5f);
+        discription1.setColor(Color.BLACK);
         stage.addActor(discription1);
         discription2.setSize(200, 100);
-        discription2.setPosition(525,280);
+        discription2.setPosition(530,280);
         discription2.setAlignment(Align.center);
+        discription2.setColor(Color.BLACK);
         discription2.setFontScale(1.5f);
         stage.addActor(discription2);
         discription3.setSize(200, 100);
-        discription3.setPosition(502,245);
+        discription3.setPosition(507,245);
         discription3.setAlignment(Align.center);
+        discription3.setColor(Color.BLACK);
         discription3.setFontScale(1.5f);
         stage.addActor(discription3);
         discription4.setSize(200, 100);
-        discription4.setPosition(573,200);
+        discription4.setPosition(578,200);
         discription4.setAlignment(Align.center);
+        discription4.setColor(Color.BLACK);
         discription4.setFontScale(1.5f);
         stage.addActor(discription4);
         discription5.setSize(200, 100);
-        discription5.setPosition(370,155);
+        discription5.setPosition(375,155);
         discription5.setAlignment(Align.center);
+        discription5.setColor(Color.BLACK);
         discription5.setFontScale(1.5f);
         stage.addActor(discription5);
         insta1.setSize(200, 100);
-        insta1.setPosition(620,110);
+        insta1.setPosition(625,110);
         insta1.setAlignment(Align.center);
+        insta1.setColor(Color.BLACK);
         insta1.setFontScale(1.5f);
         stage.addActor(insta1);
         insta2.setSize(200, 100);
-        insta2.setPosition(590,80);
+        insta2.setPosition(595,80);
         insta2.setAlignment(Align.center);
+        insta2.setColor(Color.BLACK);
         insta2.setFontScale(1.5f);
         stage.addActor(insta2);
         insta3.setSize(200, 100);
-        insta3.setPosition(565,50);
+        insta3.setPosition(570,50);
         insta3.setAlignment(Align.center);
+        insta3.setColor(Color.BLACK);
         insta3.setFontScale(1.5f);
         stage.addActor(insta3);
 
@@ -87,7 +96,7 @@ public class About_Screen implements Screen {
         TextureRegionDrawable myBackTexRegionDrawable = new TextureRegionDrawable(myBackTextureRegion);
         ImageButton BackButton = new ImageButton(myBackTexRegionDrawable);
 
-        BackButton.setPosition(790, 445);
+        BackButton.setPosition(805, 447);
         BackButton.setSize(265, 60);
         BackButton.addListener(new InputListener() {
             @Override
