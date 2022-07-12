@@ -1,4 +1,11 @@
 package com.mygdx.cic.utils;
+import static com.mygdx.cic.utils.Constants.PPM;
+import static com.mygdx.cic.utils.Constants.Bit_Bullet;
+import static com.mygdx.cic.utils.Constants.Bit_Bullet1;
+import static com.mygdx.cic.utils.Constants.Bit_Player1;
+import static com.mygdx.cic.utils.Constants.Bit_Enemy;
+import static com.mygdx.cic.utils.Constants.Bit_Player2;
+import static com.mygdx.cic.utils.Constants.Bit_StaticObjects;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -34,11 +41,19 @@ public class TiledObjectUtil {
 
             Body body;
             BodyDef bdef = new BodyDef();
+
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = shape;
+            fixtureDef.density = 1.0f;
+            fixtureDef.filter.categoryBits = (short) Bit_StaticObjects;
+            fixtureDef.filter.maskBits = (short) (Bit_Bullet | Bit_Bullet1 | Bit_Enemy | Bit_Player1 | Bit_Player2);
+            fixtureDef.filter.groupIndex = (short) 0;
             bdef.type = BodyDef.BodyType.StaticBody;
             body = world.createBody(bdef);
-            body.createFixture(shape, 1.0f);
+            body.createFixture(fixtureDef);
             body.setUserData(BodiesData.TILEDMAP);
             shape.dispose();
+
         }}
         catch (Exception e){
             System.out.println("Error handling Map Objects!");

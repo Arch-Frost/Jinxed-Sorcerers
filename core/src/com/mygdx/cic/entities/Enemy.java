@@ -8,7 +8,7 @@ import static com.mygdx.cic.utils.Constants.PPM;
 public class Enemy extends Entity{
     private static Body Body;
 
-    public static Body create(World world, float x, float y, float width, float height) {
+    public static Body create(World world, float x, float y, float width, float height, short c_bits , short m_bits) {
         BodyDef bodydef = new BodyDef();
 
         bodydef.type = BodyDef.BodyType.DynamicBody;
@@ -25,6 +25,9 @@ public class Enemy extends Entity{
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = c_bits;
+        fixtureDef.filter.groupIndex = (short) 0;
+        fixtureDef.filter.maskBits = m_bits;
         fixtureDef.density = 1.0f;
 
         Body.createFixture(fixtureDef);

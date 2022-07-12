@@ -5,11 +5,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import static com.mygdx.cic.utils.Constants.PPM;
 
 public class Bullet extends Entity{
-    public Bullet(World world, Body pointOfOrigin, Boolean add) {
-        createBullet(world, pointOfOrigin, add);
+    public Bullet(World world, Body pointOfOrigin, Boolean add,short c_bits , short m_bits) {
+        createBullet(world, pointOfOrigin, add
+                , c_bits , m_bits);
     }
 
-    public static Body createBullet(World world, Body PointofOrigin,Boolean add) {
+    public static Body createBullet(World world, Body PointofOrigin,Boolean add, short c_bits , short m_bits) {
         Body BulletBody;
         BodyDef bodydef = new BodyDef();
 
@@ -28,10 +29,12 @@ public class Bullet extends Entity{
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
+        fixtureDef.filter.categoryBits = c_bits;
+        fixtureDef.filter.maskBits = m_bits;
+        fixtureDef.filter.groupIndex = (short) 0;
         BulletBody.createFixture(fixtureDef);
 
         shape.dispose();
         return BulletBody;
     }
-
 }

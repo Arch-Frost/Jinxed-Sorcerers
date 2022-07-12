@@ -1,5 +1,11 @@
 package com.mygdx.cic.screens;
-
+import static com.mygdx.cic.utils.Constants.PPM;
+import static com.mygdx.cic.utils.Constants.Bit_Bullet;
+import static com.mygdx.cic.utils.Constants.Bit_Bullet1;
+import static com.mygdx.cic.utils.Constants.Bit_Player1;
+import static com.mygdx.cic.utils.Constants.Bit_Enemy;
+import static com.mygdx.cic.utils.Constants.Bit_Player2;
+import static com.mygdx.cic.utils.Constants.Bit_StaticObjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -123,10 +129,11 @@ public class DungeonMap implements Screen{
         // Player 1: x = 4, y = 3, Player 2: x = 7, y = 3 --------- Map 2
         // Player 1: x = 4, y = 9, Player 2: x = 7, y = 9 --------- Dark Map
         // Player 1: x = 4, y = 5, Player 2: x = 7, y = 5 --------- Green Map
-
-        player1 = Player.create(world, 9f, 5f, 16f, 16f, false);
+        player1 = Player.create(world, 22.5f, 45.8f, 16f, 16f, false, (short) Bit_Player1,
+                (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
         player1.setUserData(BodiesData.PLAYER1);
-        player2 = Player.create(world, 41f, 5f, 16f, 16f, false);
+        player2 = Player.create(world, 27.5f, 45.8f, 16f, 16f, false, (short) Bit_Player2,
+                (short) (Bit_Player1 |Bit_Enemy | Bit_Bullet | Bit_StaticObjects));
         player2.setUserData(BodiesData.PLAYER2);
 
 
@@ -213,6 +220,7 @@ public class DungeonMap implements Screen{
 //        tempDistance = playerDistance;
         playerDistance = Vector2.dst2(player1.getPosition().x, player1.getPosition().y, player2.getPosition().x, player2.getPosition().y);
 //        System.out.println("Player Distance: " + playerDistance);
+            lasermaths(delta);
         inputUpdate(delta);
         cameraUpdate(delta);
         for(Body b : bulletsToPlayerTwo){
@@ -301,16 +309,19 @@ public class DungeonMap implements Screen{
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
 
-            bullet = Bullet.createBullet(world, player1,true);
+            bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
+                    (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
             bullet.setUserData(BodiesData.BULLET);
             bulletsToPlayerTwo.add(bullet);
 
-            bullet1 = Bullet.createBullet(world, player2,false);
+            bullet1 = Bullet.createBullet(world, player2,false,Bit_Bullet1,
+                    (short) (Bit_Player1 |Bit_Enemy | Bit_Bullet | Bit_StaticObjects));
             bullet1.setUserData(BodiesData.BULLET1);
             bulletsToPlayerOne.add(bullet1);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            enemy = Enemy.create(world, player2.getPosition().x, player2.getPosition().y, 16, 16);
+            enemy = Enemy.create(world, player2.getPosition().x, player2.getPosition().y, 16, 16,
+                    (short) Bit_Enemy, (short) ((Bit_Player1 |Bit_Player2 | Bit_Bullet | Bit_StaticObjects)));
             enemy.setUserData(BodiesData.ENEMY);
             allEnemies.add(enemy);
         }
@@ -349,4 +360,24 @@ public class DungeonMap implements Screen{
     public void hide() {
 
     }
-}
+    public void lasermaths(float delta){
+        float x = (player1.getPosition().x - player2.getPosition().x);
+        float y = (player1.getPosition().y - player2.getPosition().y);
+        float distance = (float) Math.pow(x*x + y*y,0.5);
+        System.out.println(distance);
+        if(distance <= 3){
+            bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
+                    (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
+            bullet.setUserData(BodiesData.BULLET);
+            bulletsToPlayerTwo.add(bullet);
+
+//            bullet1 = Bullet.createBullet(world, player2,false);
+//            bullet1.setUserData(BodiesData.BULLET1);
+//            bulletsToPlayerOne.add(bullet1);
+        }
+        if(distance > 5){
+            bulletsToPlayerOne.clear();
+            bulletsToPlayerTwo.clear();
+        }
+
+}}

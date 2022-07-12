@@ -7,11 +7,12 @@ import static com.mygdx.cic.utils.Constants.PPM;
 public class Player extends Entity{
     public static Body Body;
 
-    public Player(World world, float x, float y, float width, float height, boolean isStatic) {
-        create(world, x, y, width, height, isStatic);
+    public Player(World world, float x, float y, float width, float height, boolean isStatic, short c_bits ,
+                  short m_bits) {
+        create(world, x, y, width, height, isStatic, c_bits,m_bits);
     }
 
-    public static Body create(World world, float x, float y, float width, float height, boolean isStatic) {
+    public static Body create(World world, float x, float y, float width, float height, boolean isStatic, short c_bits,short m_bits) {
         BodyDef bodydef = new BodyDef();
 
         if (isStatic)
@@ -32,10 +33,14 @@ public class Player extends Entity{
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
+        fixtureDef.filter.categoryBits = c_bits;
+        fixtureDef.filter.maskBits = m_bits;
+        fixtureDef.filter.groupIndex = (short) 0;
 
         Body.createFixture(fixtureDef);
         shape.dispose();
         return Body;
     }
+
 
 }
