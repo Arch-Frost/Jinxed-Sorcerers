@@ -3,8 +3,10 @@ package com.mygdx.cic.utils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.cic.CIC;
 import com.mygdx.cic.savedata.Save;
+import com.mygdx.cic.screens.DungeonMap;
 import com.mygdx.cic.screens.Game_OverScreen;
 import com.mygdx.cic.screens.Menu_Screen;
+import com.mygdx.cic.screens.OasisMap;
 
 import java.util.ArrayList;
 
@@ -55,18 +57,26 @@ public class CollisionListener implements ContactListener {
                 }
             }
             if (a.getUserData() == ENEMY && b.getUserData() == PLAYER1) {
+                OasisMap.sound.stop();
+                DungeonMap.sound.stop();
                 CIC.game_overScreen=new Game_OverScreen(parent);
                 parent.changeScreen(CIC.GO_screen);
             }
             if (b.getUserData() == ENEMY && a.getUserData() == PLAYER1) {
+                OasisMap.sound.stop();
+                DungeonMap.sound.stop();
                 CIC.game_overScreen=new Game_OverScreen(parent);
                 parent.changeScreen(CIC.GO_screen);
             }
             if (a.getUserData() == ENEMY && b.getUserData() == PLAYER2) {
+                OasisMap.sound.stop();
+                DungeonMap.sound.stop();
                 CIC.game_overScreen=new Game_OverScreen(parent);
                 parent.changeScreen(CIC.GO_screen);
             }
             if (b.getUserData() == ENEMY && a.getUserData() == PLAYER2) {
+                OasisMap.sound.stop();
+                DungeonMap.sound.stop();
                 CIC.game_overScreen=new Game_OverScreen(parent);
                 parent.changeScreen(CIC.GO_screen);
             }

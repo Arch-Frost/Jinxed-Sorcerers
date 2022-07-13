@@ -24,14 +24,10 @@ public  class Loading_Screen implements Screen {
     private Stage stage;
     private Animation animation;
     private SpriteBatch batch;
-    final Sound sound ;
 
     float time = 0;
     private float origin_x, origin_y;
     public Loading_Screen(CIC cic){
-        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/LOADING.wav"));
-        sound.play(1.0f);
-
         parent=cic;
     }
 

@@ -2,6 +2,7 @@ package com.mygdx.cic.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -17,9 +18,13 @@ public class Animation_Screen implements Screen {
     private Stage stage;
     private Animation animation;
     private SpriteBatch batch;
+    private Sound sound;
     float time = 0;
     private float origin_x, origin_y;
+
     public Animation_Screen(CIC cic){
+        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/LOADING.wav"));
+        sound.play(1.0f);
         parent=cic;
     }
     @Override

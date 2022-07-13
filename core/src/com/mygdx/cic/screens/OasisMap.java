@@ -80,13 +80,12 @@ public class OasisMap implements Screen{
 
     public boolean isPaused;
     private Body enemy;
-    final Sound sound;
+    public static Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/INGAME.wav"));
     private float cameraControl;
 
     public OasisMap(CIC cic)
     {
         parent = cic;
-        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/INGAME.wav"));
         sound.play(1.0f);
         sound.loop();
     }
