@@ -2,6 +2,7 @@ package com.mygdx.cic.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,7 +28,10 @@ public class Game_OverScreen implements Screen {
     static boolean return_main_menu=false;
     static boolean open_maps_menu=false;
     private Skin mySkin;
+    final Sound sound;
     public Game_OverScreen(CIC cic) {
+        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/GAMEOVER.wav"));
+        sound.play(1.0f);
         parent=cic;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

@@ -3,6 +3,7 @@ package com.mygdx.cic.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -40,6 +41,7 @@ public class OasisMap implements Screen{
     private float elapsedTime = 0f;
     private int score;
     private long startTime = System.currentTimeMillis();
+    static boolean return_main_menu=false;
 
     private SpriteBatch batch;
     private Texture pauseImage;
@@ -74,10 +76,14 @@ public class OasisMap implements Screen{
 
     public boolean isPaused;
     private Body enemy;
+    final Sound sound;
 
     public OasisMap(CIC cic)
     {
         parent = cic;
+        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/INGAME.wav"));
+        sound.play(1.0f);
+        sound.loop();
     }
 
     @Override
@@ -170,6 +176,11 @@ public class OasisMap implements Screen{
             batch.setProjectionMatrix(camera.combined);
         }
         batch.end();
+            if(return_main_menu){
+                return_main_menu=false;
+                CIC.menu_screen=new Menu_Screen(parent);
+                parent.changeScreen(CIC.M_screen);
+            }
 //        b2dr.render(world, camera.combined.scl(PPM));
         if (isPaused) {
             delta = 0;
@@ -343,6 +354,10 @@ public class OasisMap implements Screen{
     public void pause() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
             isPaused = false;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)){
+            return_main_menu=true;
+        }
+        sound.stop();
         Save.save();
     }
 
