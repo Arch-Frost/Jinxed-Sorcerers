@@ -76,6 +76,7 @@ public class OasisMap implements Screen{
 
     public boolean isPaused;
     private Body enemy;
+    private float cameraControl;
 
     public OasisMap(CIC cic)
     {
@@ -215,7 +216,7 @@ public class OasisMap implements Screen{
                 i.remove();
             }
         }
-//        tempDistance = playerDistance;
+        tempDistance = playerDistance;
         playerDistance = Vector2.dst2(player1.getPosition().x, player1.getPosition().y, player2.getPosition().x, player2.getPosition().y);
 //        System.out.println("Player Distance: " + playerDistance);
         lasermaths(delta);
@@ -236,7 +237,7 @@ public class OasisMap implements Screen{
             Bullet.update(delta,B,player1, 5);
         }
         for(Body enemy : allEnemies){
-            Enemy.update(delta, enemy, enemyTarget(), 1, true);
+            Enemy.update(delta, enemy, enemyTarget(), 2, true);
         }
 //        Enemy.updateEnemy(delta, demon, player1);
         batch.setProjectionMatrix(camera.combined);
@@ -260,13 +261,7 @@ public class OasisMap implements Screen{
         position.y = (player1.getPosition().y + player2.getPosition().y)/2 * PPM   ;
         camera.position.set(position);
 
-
-//        while (tempDistance < playerDistance) {
-//            camera.zoom += 0.2;
-//        }
-//        while (tempDistance > playerDistance) {
-//            camera.zoom -= 0.2;
-//        }
+//        cameraAutoZoom(delta);
 
         camera.update();
     }
@@ -408,5 +403,21 @@ public class OasisMap implements Screen{
         Body[] players = { player1 , player2 };
         int target = (int) (Math.random() * players.length);
         return players[target];
+    }
+
+    private void cameraAutoZoom(float delta) {
+        cameraControl += delta;
+        if (tempDistance < playerDistance && cameraControl > 0.01f) {
+            if (camera.zoom < 2f) {
+                camera.zoom += 0.02;
+            }
+            cameraControl = 0;
+        }
+        if (tempDistance > playerDistance && cameraControl > 0.01f) {
+            if (camera.zoom > 0.8f) {
+                camera.zoom -= 0.02;
+            }
+            cameraControl = 0;
+        }
     }
 }
