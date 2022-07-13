@@ -304,10 +304,10 @@ public class OasisMap implements Screen{
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
             isPaused = true;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.P))
+        if (Gdx.input.isKeyPressed(Input.Keys.P) && camera.zoom < 2.0)
             camera.zoom += 0.02;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.O))
+        if (Gdx.input.isKeyPressed(Input.Keys.O) && camera.zoom > 0.8)
             camera.zoom -= 0.02;
 
 //        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
