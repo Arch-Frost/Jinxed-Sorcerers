@@ -62,6 +62,14 @@ public class CollisionListener implements ContactListener {
                 CIC.game_overScreen=new Game_OverScreen(parent);
                 parent.changeScreen(CIC.GO_screen);
             }
+            if (a.getUserData() == ENEMY && b.getUserData() == PLAYER2) {
+                CIC.game_overScreen=new Game_OverScreen(parent);
+                parent.changeScreen(CIC.GO_screen);
+            }
+            if (b.getUserData() == ENEMY && a.getUserData() == PLAYER2) {
+                CIC.game_overScreen=new Game_OverScreen(parent);
+                parent.changeScreen(CIC.GO_screen);
+            }
         }
         catch (NullPointerException e){
             System.out.println("Object is declared Null!");

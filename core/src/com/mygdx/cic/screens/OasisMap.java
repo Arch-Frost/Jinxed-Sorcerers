@@ -33,6 +33,7 @@ import static com.mygdx.cic.utils.Constants.Bit_Player1;
 import static com.mygdx.cic.utils.Constants.Bit_Enemy;
 import static com.mygdx.cic.utils.Constants.Bit_Player2;
 import static com.mygdx.cic.utils.Constants.Bit_StaticObjects;
+
 public class OasisMap implements Screen{
     private final float SCALE = 2;
     private final CIC parent;
@@ -42,6 +43,9 @@ public class OasisMap implements Screen{
     private int score;
     private long startTime = System.currentTimeMillis();
     static boolean return_main_menu=false;
+
+    private float clock = 0;
+
 
     private SpriteBatch batch;
     private Texture pauseImage;
@@ -199,6 +203,7 @@ public class OasisMap implements Screen{
     public void update(float delta) {
         try{
         world.step(1/60f, 6,2);
+        clock += delta;
 
         if (!isPaused) {
             Save.timeSurvived = System.currentTimeMillis() - startTime;
@@ -226,16 +231,25 @@ public class OasisMap implements Screen{
 //        tempDistance = playerDistance;
         playerDistance = Vector2.dst2(player1.getPosition().x, player1.getPosition().y, player2.getPosition().x, player2.getPosition().y);
 //        System.out.println("Player Distance: " + playerDistance);
-            lasermaths(delta);
+        lasermaths(delta);
         inputUpdate(delta);
         cameraUpdate(delta);
+
+        if (clock > 2) {
+            enemy = Enemy.create(world, enemySpawnPoints(), 16, 16,
+                    (short) Bit_Enemy, (short) ((Bit_Player1 |Bit_Player2 | Bit_Bullet | Bit_StaticObjects)));
+            enemy.setUserData(BodiesData.ENEMY);
+            allEnemies.add(enemy);
+            clock = 0;
+        }
+
         for(Body b : bulletsToPlayerTwo){
             Bullet.update(delta,b,player2, 5);}
         for(Body B : bulletsToPlayerOne){
             Bullet.update(delta,B,player1, 5);
         }
         for(Body enemy : allEnemies){
-            Enemy.update(delta, enemy, player1, 1, true);
+            Enemy.update(delta, enemy, enemyTarget(), 1, true);
         }
 //        Enemy.updateEnemy(delta, demon, player1);
         batch.setProjectionMatrix(camera.combined);
@@ -314,20 +328,20 @@ public class OasisMap implements Screen{
         if (Gdx.input.isKeyPressed(Input.Keys.O))
             camera.zoom -= 0.02;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-
-            bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
-                    (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
-            bullet.setUserData(BodiesData.BULLET);
-            bulletsToPlayerTwo.add(bullet);
-
-            bullet1 = Bullet.createBullet(world, player2,false,Bit_Bullet1,
-                    (short) (Bit_Player1 |Bit_Enemy | Bit_Bullet | Bit_StaticObjects));
-            bullet1.setUserData(BodiesData.BULLET1);
-            bulletsToPlayerOne.add(bullet1);
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+//
+//            bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
+//                    (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
+//            bullet.setUserData(BodiesData.BULLET);
+//            bulletsToPlayerTwo.add(bullet);
+//
+//            bullet1 = Bullet.createBullet(world, player2,false,Bit_Bullet1,
+//                    (short) (Bit_Player1 |Bit_Enemy | Bit_Bullet | Bit_StaticObjects));
+//            bullet1.setUserData(BodiesData.BULLET1);
+//            bulletsToPlayerOne.add(bullet1);
+//        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            enemy = Enemy.create(world, player2.getPosition().x, player2.getPosition().y, 16, 16,
+            enemy = Enemy.create(world, enemySpawnPoints(), 16, 16,
                     (short) Bit_Enemy, (short) ((Bit_Player1 |Bit_Player2 | Bit_Bullet | Bit_StaticObjects)));
             enemy.setUserData(BodiesData.ENEMY);
             allEnemies.add(enemy);
@@ -375,7 +389,7 @@ public class OasisMap implements Screen{
         float x = (player1.getPosition().x - player2.getPosition().x);
         float y = (player1.getPosition().y - player2.getPosition().y);
         float distance = (float) Math.pow(x*x + y*y,0.5);
-        System.out.println(distance);
+//        System.out.println(distance);
         if(distance <= 3){
             bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
                     (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
@@ -390,6 +404,26 @@ public class OasisMap implements Screen{
             bulletsToPlayerOne.clear();
             bulletsToPlayerTwo.clear();
         }
+    }
 
+    private Vector2 enemySpawnPoints() {
+        Vector2[] spawnPoints = new Vector2[8];
+        spawnPoints[0] = (new Vector2(5f, 33f));
+        spawnPoints[1] = (new Vector2(5f, 23f));
+        spawnPoints[2] = (new Vector2(11.8f, 10.8f));
+        spawnPoints[3] = (new Vector2(26f, 5f));
+        spawnPoints[4] = (new Vector2(23.5f, 27f));
+        spawnPoints[5] = (new Vector2(37f, 27.4f));
+        spawnPoints[6] = (new Vector2(39.5f, 34.9f));
+        spawnPoints[7] = (new Vector2(24.8f, 47.47f));
+
+        int current = (int) (Math.random() * spawnPoints.length);
+        return spawnPoints[current];
+    }
+
+    private Body enemyTarget() {
+        Body[] players = { player1 , player2 };
+        int target = (int) (Math.random() * players.length);
+        return players[target];
     }
 }

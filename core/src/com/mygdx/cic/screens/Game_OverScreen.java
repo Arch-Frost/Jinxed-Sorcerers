@@ -137,6 +137,8 @@ public class Game_OverScreen implements Screen {
         Time_Played1.setFontScale(1.5f);
         stage.addActor(Time_Played1);
 
+        Save.enemiesKilled = 0;
+        Save.timeSurvived = 0;
 
         Label colon1 = new Label(":", mySkin,"default");
         colon1.setSize(200, 100);

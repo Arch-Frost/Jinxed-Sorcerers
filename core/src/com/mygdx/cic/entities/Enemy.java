@@ -8,13 +8,13 @@ import static com.mygdx.cic.utils.Constants.PPM;
 public class Enemy extends Entity{
     private static Body Body;
 
-    public static Body create(World world, float x, float y, float width, float height, short c_bits , short m_bits) {
+    public static Body create(World world, Vector2 position, float width, float height, short c_bits , short m_bits) {
         BodyDef bodydef = new BodyDef();
 
         bodydef.type = BodyDef.BodyType.DynamicBody;
 
 
-        bodydef.position.set(x, y);
+        bodydef.position.set(position);
         bodydef.fixedRotation = true;
 
 
@@ -34,5 +34,4 @@ public class Enemy extends Entity{
         shape.dispose();
         return Body;
     }
-
 }

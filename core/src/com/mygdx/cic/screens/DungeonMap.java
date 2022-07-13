@@ -47,6 +47,7 @@ public class DungeonMap implements Screen{
     private float elapsedTime = 0f;
     private int score;
     private long startTime = System.currentTimeMillis();
+    private float clock;
 
     private SpriteBatch batch;
     private Texture pauseImage;
@@ -145,7 +146,7 @@ public class DungeonMap implements Screen{
         map = new TmxMapLoader().load("DungeonMap/dungeon.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         TiledObjectUtil.parseTiledObjectLayer(world, map.getLayers().get("collision-layer").getObjects());
-        camera.zoom = 2.5f;
+        camera.zoom = 0.8f;
         Save.load();
         score = (int) Save.gd.getTentativeScore();
 
@@ -197,12 +198,13 @@ public class DungeonMap implements Screen{
     public void update(float delta) {
         try{
         world.step(1/60f, 6,2);
+        clock += delta;
 
         if (!isPaused) {
             Save.timeSurvived = System.currentTimeMillis() - startTime;
         }
 
-//        System.out.println("Player 1: x: " + player1.getPosition().x +" y: " + player1.getPosition().y);
+        System.out.println("Player 1: x: " + player1.getPosition().x +" y: " + player1.getPosition().y);
 //        System.out.println("Player 2: x: " + player2.getPosition().x +" y: " + player2.getPosition().y);
 //        System.out.println("Camera Zoom: " + camera.zoom);
         toberemoved = listener.getBodies();
@@ -228,13 +230,22 @@ public class DungeonMap implements Screen{
             lasermaths(delta);
         inputUpdate(delta);
         cameraUpdate(delta);
+
+        if (clock > 2) {
+            enemy = Enemy.create(world, enemySpawnPoints(), 16, 16,
+                    (short) Bit_Enemy, (short) ((Bit_Player1 |Bit_Player2 | Bit_Bullet | Bit_StaticObjects)));
+            enemy.setUserData(BodiesData.ENEMY);
+            allEnemies.add(enemy);
+            clock = 0;
+        }
+
         for(Body b : bulletsToPlayerTwo){
             Bullet.update(delta,b,player2, 5);}
         for(Body B : bulletsToPlayerOne){
             Bullet.update(delta,B,player1, 5);
         }
         for(Body enemy : allEnemies){
-            Enemy.update(delta, enemy, player1, 1, true);
+            Enemy.update(delta, enemy, enemyTarget(), 1, true);
         }
         batch.setProjectionMatrix(camera.combined);
         mapRenderer.setView(camera);
@@ -325,7 +336,7 @@ public class DungeonMap implements Screen{
             bulletsToPlayerOne.add(bullet1);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            enemy = Enemy.create(world, player2.getPosition().x, player2.getPosition().y, 16, 16,
+            enemy = Enemy.create(world, enemySpawnPoints(), 16, 16,
                     (short) Bit_Enemy, (short) ((Bit_Player1 |Bit_Player2 | Bit_Bullet | Bit_StaticObjects)));
             enemy.setUserData(BodiesData.ENEMY);
             allEnemies.add(enemy);
@@ -370,7 +381,7 @@ public class DungeonMap implements Screen{
         float x = (player1.getPosition().x - player2.getPosition().x);
         float y = (player1.getPosition().y - player2.getPosition().y);
         float distance = (float) Math.pow(x*x + y*y,0.5);
-        System.out.println(distance);
+//        System.out.println(distance);
         if(distance <= 3){
             bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
                     (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
@@ -385,5 +396,26 @@ public class DungeonMap implements Screen{
             bulletsToPlayerOne.clear();
             bulletsToPlayerTwo.clear();
         }
+    }
 
-}}
+    private Vector2 enemySpawnPoints() {
+        Vector2[] spawnPoints = new Vector2[8];
+        spawnPoints[0] = (new Vector2(31f, 29.8f));
+        spawnPoints[1] = (new Vector2(18.7f, 29.5f));
+        spawnPoints[2] = (new Vector2(17.3f, 46.5f));
+        spawnPoints[3] = (new Vector2(30.8f, 47.44f));
+        spawnPoints[4] = (new Vector2(13.08f, 13.68f));
+        spawnPoints[5] = (new Vector2(37.75f, 13.02f));
+        spawnPoints[6] = (new Vector2(45.4f, 9.19f));
+        spawnPoints[7] = (new Vector2(5.82f, 9.35f));
+
+        int current = (int) (Math.random() * spawnPoints.length);
+        return spawnPoints[current];
+    }
+
+    private Body enemyTarget() {
+        Body[] players = { player1 , player2 };
+        int target = (int) (Math.random() * players.length);
+        return players[target];
+    }
+}
