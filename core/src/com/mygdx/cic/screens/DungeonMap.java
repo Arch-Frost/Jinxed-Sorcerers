@@ -319,24 +319,24 @@ public class DungeonMap implements Screen{
         if (Gdx.input.isKeyPressed(Input.Keys.O) && camera.zoom > 0.8)
             camera.zoom -= 0.02;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-
-            bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
-                    (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
-            bullet.setUserData(BodiesData.BULLET);
-            bulletsToPlayerTwo.add(bullet);
-
-            bullet1 = Bullet.createBullet(world, player2,false,Bit_Bullet1,
-                    (short) (Bit_Player1 |Bit_Enemy | Bit_Bullet | Bit_StaticObjects));
-            bullet1.setUserData(BodiesData.BULLET1);
-            bulletsToPlayerOne.add(bullet1);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            enemy = Enemy.create(world, enemySpawnPoints(), 16, 16,
-                    (short) Bit_Enemy, (short) ((Bit_Player1 |Bit_Player2 | Bit_Bullet | Bit_StaticObjects)));
-            enemy.setUserData(BodiesData.ENEMY);
-            allEnemies.add(enemy);
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+//
+//            bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
+//                    (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
+//            bullet.setUserData(BodiesData.BULLET);
+//            bulletsToPlayerTwo.add(bullet);
+//
+//            bullet1 = Bullet.createBullet(world, player2,false,Bit_Bullet1,
+//                    (short) (Bit_Player1 |Bit_Enemy | Bit_Bullet | Bit_StaticObjects));
+//            bullet1.setUserData(BodiesData.BULLET1);
+//            bulletsToPlayerOne.add(bullet1);
+//        }
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+//            enemy = Enemy.create(world, enemySpawnPoints(), 16, 16,
+//                    (short) Bit_Enemy, (short) ((Bit_Player1 |Bit_Player2 | Bit_Bullet | Bit_StaticObjects)));
+//            enemy.setUserData(BodiesData.ENEMY);
+//            allEnemies.add(enemy);
+//        }
     }
 
     @Override
@@ -378,7 +378,7 @@ public class DungeonMap implements Screen{
         float y = (player1.getPosition().y - player2.getPosition().y);
         float distance = (float) Math.pow(x*x + y*y,0.5);
 //        System.out.println(distance);
-        if(distance <= 3){
+        if(distance <= 5){
             bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
                     (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
             bullet.setUserData(BodiesData.BULLET);
@@ -388,7 +388,7 @@ public class DungeonMap implements Screen{
 //            bullet1.setUserData(BodiesData.BULLET1);
 //            bulletsToPlayerOne.add(bullet1);
         }
-        if(distance > 5){
+        if(distance > 7){
             bulletsToPlayerOne.clear();
             bulletsToPlayerTwo.clear();
         }
