@@ -244,9 +244,9 @@ public class OasisMap implements Screen{
         }
 
         for(Body b : bulletsToPlayerTwo){
-            Bullet.update(delta,b,player2, 5);}
+            Bullet.update(delta,b,player2, 20);}
         for(Body B : bulletsToPlayerOne){
-            Bullet.update(delta,B,player1, 5);
+            Bullet.update(delta,B,player1, 20);
         }
         for(Body enemy : allEnemies){
             Enemy.update(delta, enemy, enemyTarget(), 2, true);
@@ -388,6 +388,7 @@ public class OasisMap implements Screen{
             bullet = Bullet.createBullet(world, player1,true,Bit_Bullet,
                     (short) (Bit_Player2 |Bit_Enemy | Bit_Bullet1 | Bit_StaticObjects));
             bullet.setUserData(BodiesData.BULLET);
+
             bulletsToPlayerTwo.add(bullet);
 
 //            bullet1 = Bullet.createBullet(world, player2,false);

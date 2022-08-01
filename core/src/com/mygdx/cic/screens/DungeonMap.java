@@ -240,9 +240,9 @@ public class DungeonMap implements Screen{
         }
 
         for(Body b : bulletsToPlayerTwo){
-            Bullet.update(delta,b,player2, 5);}
+            Bullet.update(delta,b,player2, 20);}
         for(Body B : bulletsToPlayerOne){
-            Bullet.update(delta,B,player1, 5);
+            Bullet.update(delta,B,player1, 20);
         }
         for(Body enemy : allEnemies){
             Enemy.update(delta, enemy, enemyTarget(), 2, true);

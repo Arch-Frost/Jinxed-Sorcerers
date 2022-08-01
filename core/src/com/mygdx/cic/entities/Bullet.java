@@ -29,6 +29,7 @@ public class Bullet extends Entity{
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
+        fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = c_bits;
         fixtureDef.filter.maskBits = m_bits;
         fixtureDef.filter.groupIndex = (short) 0;
