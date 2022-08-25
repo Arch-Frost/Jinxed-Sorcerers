@@ -91,7 +91,7 @@ public class Game_OverScreen implements Screen {
         Game_over_l.setAlignment(Align.center);
         Game_over_l.setFontScale(2.5f);
         stage.addActor(Game_over_l);
-        Label Score = new Label("Latest Score", mySkin,"default");
+        Label Score = new Label("All Time Score", mySkin,"default");
         Score.setSize(200, 100);
         Score.setPosition(360,230);
         Score.setColor(Color.BLACK);

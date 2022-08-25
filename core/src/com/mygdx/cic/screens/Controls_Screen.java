@@ -33,7 +33,7 @@ public class Controls_Screen implements Screen{
         image1.setSize(1370,770);
         stage.addActor(image1);
         mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        Label Player1_control = new Label("Player 1 Controls", mySkin,"default");
+        Label Player1_control = new Label("Player 2 Controls", mySkin,"default");
         Player1_control.setSize(160, 80);
         Player1_control.setPosition(280,395);
         Player1_control.setAlignment(Align.center);
@@ -70,16 +70,16 @@ public class Controls_Screen implements Screen{
         l44.setSize(160, 80);
         l44.setPosition(365,170);
         l44.setAlignment(Align.center);
-        Label l5 = new Label("Disable", mySkin);
+        Label l5 = new Label("Zoom Out", mySkin);
         l5.setSize(160, 80);
         l5.setPosition(195,120);
         l5.setAlignment(Align.center);
-        Label l55 = new Label("X", mySkin);
+        Label l55 = new Label("P", mySkin);
         l55.setSize(160, 80);
         l55.setPosition(365,120);
         l55.setAlignment(Align.center);
 
-        Label Player2_control = new Label("Player 2 Controls", mySkin);
+        Label Player2_control = new Label("Player 1 Controls", mySkin);
         Player2_control.setSize(160, 80);
         Player2_control.setPosition(855,440);
         Player2_control.setFontScale(1.5f);
@@ -116,11 +116,11 @@ public class Controls_Screen implements Screen{
         l99.setSize(160, 80);
         l99.setPosition(955,210);
         l99.setAlignment(Align.center);
-        Label l10 = new Label("Disable", mySkin);
+        Label l10 = new Label("Zoom In", mySkin);
         l10.setSize(160, 80);
         l10.setPosition(785,160);
         l10.setAlignment(Align.center);
-        Label l1010 = new Label("X", mySkin);
+        Label l1010 = new Label("O", mySkin);
         l1010.setSize(160, 80);
         l1010.setPosition(955,160);
         l1010.setAlignment(Align.center);

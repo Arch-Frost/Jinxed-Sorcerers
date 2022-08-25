@@ -88,7 +88,7 @@ public class DungeonMap implements Screen{
     public DungeonMap(CIC cic)
     {
         parent = cic;
-        sound.play(1.0f);
+        sound.play(0.5f);
         sound.loop();
     }
 
