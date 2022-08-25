@@ -1,7 +1,7 @@
 # Jinxed Sorcercers
 2<sup>nd </sup> semester open ended project for **Object Oriented Programming**	
 ## About the game
-### Prerequistes
+### Prerequisites
 - Java
 - Gradle
 - IDE which supports gradle build (vscode,intellij,eclipse)
