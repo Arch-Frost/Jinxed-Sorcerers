@@ -1,5 +1,7 @@
 # Jinxed Sorcercers
-2<sup>nd </sup> semester open ended project for **Object Oriented Programming**	
+2<sup>nd </sup> semester open ended project for **Object Oriented Programming** <br />
+**Note:** *This game is build upon the libgdx framework of java which offers cross-platform capabilities for it's users*<br />
+**For more Info check the documentation.**
 ## About the game
 ### Prerequisites
 - Java
